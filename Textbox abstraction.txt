@@ -1,0 +1,10 @@
+Textbox:
+	- Text
+		- Font, size
+		- Scrolling
+		- appear (speed)
+		- disapearing for next page 
+	- Box
+		- appear 
+		- contain text
+		- not too big 

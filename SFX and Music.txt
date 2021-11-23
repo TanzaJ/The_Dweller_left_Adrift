@@ -1,0 +1,22 @@
+Collision - bonk 4
+Enemy dying - bonk 2
+Hit 2 - take damage
+Hit 4 - light slash
+Hit 5 - Heavy
+flashback 2, lose 9 - when you die 
+water - (possible fountain)
+footstep - walking (edit)
+jump 6, (maybe 4) - jump
+landing, gun 5- landing on ground (maybe)
+ - interact
+cancel 2 - jammed door 
+ok 1 - Menu interact
+win 3 - opening of door 
+collect 5 - gem pickup
+
+Abstraction:
+Box jump - arena, third level first room
+	Character themes (music for each npc)
+		: Ludo
+		: Shiitake
+ 
