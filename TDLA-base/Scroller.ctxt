@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Scroller
+comment0.text=\r\n\ This\ is\ a\ support\ class\ for\ a\ scrolling\ wolrd.\ It\ contains\ two\ constructors;\r\n\ one\ for\ unlimited\ scrolling\ and\ one\ for\ limited\ scrolling.\ Both\ constructors\ have\ 'image'\r\n\ parameter.\ Because\ image\ manipulation\ can\ hog\ up\ CPU\ time,\ it\ is\ important\ to\ remember\ that\r\n\ it\ is\ better\ not\ to\ have\ a\ scrolling\ background\ image\r\n\ For\ unlimited\ scrolling\ using\ a\ background\ image,\ the\ smalle\ that\ background\ image\ to\ be\ tiled,\r\n\ the\ better.\ Making\ the\ view\ port\ (the\ size\ of\ the\ world\ that\ is\ visible)\ smaller\ can\ help\ in\r\n\ CPU\ expense,\ also.\ Scrolling\ world\ should\ be\ unbounded,\ allowing\ actors\ to\ move\ beyong\ the\ visible\ area.\r\n\ Ensuring\ that\ actors\ are\ removed\ from\ the\ world\ if\ no\ longer\ needed\ when\ out\ of\ view\ will\ help\ to\ prevent\r\n\ las\ as\ well.\r\n\ \r\n\ It\ is\ the\ responsibility\ of\ the\ World\ object\ that\ creates\ a\ Scroller\ object\ to\ determine\ whne\ to\ scroll\ and\ by\ how\ much.\r\n\ \r\n\ @author\ danpost\r\n
+comment1.params=viewWorld\ image
+comment1.target=Scroller(greenfoot.World,\ greenfoot.GreenfootImage)
+comment1.text=\r\n\ This\ constructor\ is\ for\ an\ unlimited\ scrolling\ world;\r\n\ If\ 'image'\ is\ null,\ the\ background\ will\ not\ change;\ else\ the\ given\ iamge\ is\ wrapped\r\n\ \r\n\ @param\ viewWorld\r\n\ @param\ image\ the\ background\ iamge\ that\ will\ tiled,\ if\ needed,\ and\ wrap\ with\ scrolling\r\n
+comment2.params=viewWorld\ image\ width\ height
+comment2.target=Scroller(greenfoot.World,\ greenfoot.GreenfootImage,\ int,\ int)
+comment3.params=dsx\ dsy
+comment3.target=void\ scroll(int,\ int)
+comment4.params=
+comment4.target=int\ getScrolledX()
+comment4.text=\r\n\ getter\ method\ for\ the\ current\ total\ scrolled\ disctance\ horizontally\r\n\ \r\n\ @return\ the\ current\ total\ offset\ of\ horizontal\ scrolling\r\n
+comment5.params=
+comment5.target=int\ getScrolledY()
+comment5.text=\r\n\ getter\ method\ for\ the\ current\ total\ scrolled\ disctance\ vertically\r\n\ \r\n\ @return\ the\ current\ total\ offset\ of\ vertical\ scrolling\r\n
+numComments=6
