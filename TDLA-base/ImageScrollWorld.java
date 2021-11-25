@@ -9,13 +9,14 @@ public class ImageScrollWorld extends World
 {
     public static final int WIDTH = 900; // world width (viewport)
     public static final int HEIGHT = 600; // world height (view port)
-private int groundHeight = 50;
+    private int groundHeight = 50;
     Scroller scroller; // object that performs the scrolling
     Actor scrollActor; // an actor to stay in view
     
+    
     public ImageScrollWorld()
     {    
-        super(WIDTH, HEIGHT, 1);  // creates an unbounded world
+        super(WIDTH, HEIGHT, 1);  // creates an bounded world
         GreenfootImage bg = new GreenfootImage("bg.png"); // creates the image to scroll
         int bgWide = bg.getWidth(); // scrolling image width
         int bgHigh = bg.getHeight(); // scrolling image height
@@ -36,6 +37,7 @@ private int groundHeight = 50;
         int dsy = scrollActor.getY() - HEIGHT / 2; //vertical offset from center screen
         scroller.scroll(dsx, dsy);
     }
+    
     
     public int getGroundHeight() {
         return groundHeight;
