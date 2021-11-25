@@ -12,13 +12,20 @@ public class Player extends Actor
     private int vSpeed = 0; // vertical speed (gravity + jump)
     private int halfImageY = getImage().getHeight() / 2;
     private int halfImageX = getImage().getWidth() / 2;
-    private static int dashCD = 0;
     private int state = 0; // animation state: 0 stand, 1 move, 2 attack, 3 dash, 4 jump (if had)
     private boolean upPressed;
-    private boolean upPressedShift; 
+    private boolean isDash; 
     private boolean facingRight;
+    private int dashCD = 0;
+    private int dashingTime = 0; // dashing state - disable horizontal movements + 
+    
     public void act()
     {
+        if (dashingTime > 0)
+        {
+             dashingTime--;
+             setLocation(getX() + hSpeed, getY());
+        }
         interact();
         movement();
         attack();
@@ -47,63 +54,42 @@ public class Player extends Actor
             upPressed = false;
         }
         // move horizontally :
-        hSpeed = 2;
-        if (!upPressedShift && Greenfoot.isKeyDown("shift")) {
-            if (facingRight == true) {
-                hSpeed = 50;
-            }
-            else {
-                hSpeed = -50;
-            }
-            setLocation(getX() + hSpeed, getY());
-            upPressedShift = true;
+        
+        if (dashingTime == 0) hSpeed = 2;
+        if (dashingTime == 0 && !isDash && Greenfoot.isKeyDown("shift")) {
+            isDash = true;
+            dashingTime = 8;
+            hSpeed = 10;
         }
-        if (upPressedShift && !Greenfoot.isKeyDown("shift")){
-            upPressedShift = false;
+        if (isDash && !Greenfoot.isKeyDown("shift")){
+            isDash = false;
         }
-        if (Greenfoot.isKeyDown("left")){
+        if (!isDash && Greenfoot.isKeyDown("left")){
             setLocation(getX() - hSpeed, getY());
             facingRight = false;
         }
-        if (Greenfoot.isKeyDown("right")) {
+        if (!isDash && Greenfoot.isKeyDown("right")) {
             setLocation(getX() + hSpeed, getY());
             facingRight = true;
         }
     }
     
     public void attack() {
-        if (Greenfoot.isKeyDown("d")); // light attack go here
+        if (Greenfoot.isKeyDown("d")); // light attack goes here
         if (Greenfoot.isKeyDown("s")) {
-            //heavy attack go here
-            if (Greenfoot.isKeyDown("up")) {
-                //upper attack go here
-            }
+            //heavy attack goes here
+        }
+        if (Greenfoot.isKeyDown("s") && Greenfoot.isKeyDown("up")) {
+            // upper slash goes here
         }
     }
     
     /**
-     * do animation depends of current state
-     * state:
-     * 0 stand
-     * 1 move
-     * 2 attack
-     * 3 dash
-     * 4 jump
+     * perform special animation
      * 
-     * @param state current state
-     * 
+     * @param image image's name + .extesion
      */
-    public void animation(int state) {
-        if (state == 0) {
-            // code goes here
-        } else if (state == 1) {
-            // code goes here
-        } else if (state == 2) {
-            // code goes here
-        } else if (state == 3) {
-            // code goes here
-        } else if (state == 4) {
-            
-        }
+    public void animation(String image) {
+        
     }
 }
