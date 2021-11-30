@@ -22,11 +22,17 @@ public class Player extends Actor
     private char direction;
     private static boolean enable = true;
     private int menuWaitTime = 0; // time before can press esc again
+    
+    // Textbox 
+    private boolean moreThanOne = false;
+    public boolean shouldMove = true; 
     public Player() {
         setImage("SRight.png");
         direction = 'r';
     }
-                             
+    public void returnSpeed(){
+    
+    }
     public void act()
     {
         if (enable) {
@@ -45,6 +51,8 @@ public class Player extends Actor
             interact();
             movement();
             attack();
+            createObjectText();
+            this.shouldMove = shouldMove;
         }
     }
     public void interact() {
@@ -82,12 +90,12 @@ public class Player extends Actor
             dashingTime = 8; // give count down dashingTime + prevent spamming dash (no need boolean)
             dashCD = 150; // set CD + prevent spamming dash (no need boolean)
         }
-        if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
+        if (dashingTime == 0 && Greenfoot.isKeyDown("left") && shouldMove){
             setLocation(getX() - hSpeed, getY());
             setImage("SLeft.png");
             direction = 'l';
         }
-        if (dashingTime == 0 && Greenfoot.isKeyDown("right")) {
+        if (dashingTime == 0 && Greenfoot.isKeyDown("right") && shouldMove) {
             setLocation(getX() + hSpeed, getY());
             setImage("SRight.png");
             direction = 'r';
@@ -119,4 +127,17 @@ public class Player extends Actor
     public static void setEnable(boolean state) {
         enable = state;
     }
+    
+        public void createObjectText(){
+        if (isTouching(ObjectNpc.class) &&Greenfoot.isKeyDown("e") && !moreThanOne){
+            getWorld().addObject(new TextBox(), 300, 200);
+            moreThanOne = true;
+            hSpeed = 0;
+            shouldMove = false;
+        }
+//        if (){
+//            shouldMove = true;
+//        }
+    }
+    
 }

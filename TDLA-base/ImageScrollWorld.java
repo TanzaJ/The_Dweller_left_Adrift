@@ -12,8 +12,7 @@ public class ImageScrollWorld extends World
     private int groundHeight = 50;
     Scroller scroller; // object that performs the scrolling
     Actor scrollActor; // an actor to stay in view
-    
-    
+
     public ImageScrollWorld()
     {    
         super(WIDTH, HEIGHT, 1);  // creates an bounded world
@@ -24,12 +23,13 @@ public class ImageScrollWorld extends World
         scrollActor = new Player(); // creates the actor to maintain view on
         addObject(scrollActor, bgWide / 2, bgHigh); //add actor to world (wherever)
         scroll(); // sets initial background image and puts main actor in view if needed
+        prepare();
     }
-    
+
     public void act() {
         if (scrollActor != null) scroll();
     }
-    
+
     //attempts scrolling when actor is not in center of visible world
     private void scroll() {
         //determine scrolling offsets and scroll
@@ -37,9 +37,17 @@ public class ImageScrollWorld extends World
         int dsy = scrollActor.getY() - HEIGHT / 2; //vertical offset from center screen
         scroller.scroll(dsx, dsy);
     }
-    
-    
+
     public int getGroundHeight() {
         return groundHeight;
+    }
+    /**
+     * Prepare the world for the start of the program.
+     * That is: create the initial objects and add them to the world.
+     */
+    private void prepare()
+    {
+        ObjectNpc objectNpc = new ObjectNpc();
+        addObject(objectNpc,566,516);
     }
 }
