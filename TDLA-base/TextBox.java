@@ -12,7 +12,7 @@ public class TextBox extends Objects
     private int i;
     private boolean isPressed = false;
     private boolean exists = false;
-    private boolean shouldMove2;
+    
     public TextBox(){
         
     }
@@ -39,8 +39,7 @@ public class TextBox extends Objects
         getWorld().showText(texts[i], this.getX() + 5, this.getY() - 5 );
         if (i == texts.length - 1){
             getWorld().removeObject(this);
-            Player p = ((Player) getWorld().getObjects(Player.class).get(0));
-            p.shouldMove = true;
+            Player.setEnable(true);
         }
     }
 

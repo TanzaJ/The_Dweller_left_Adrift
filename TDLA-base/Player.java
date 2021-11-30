@@ -25,7 +25,7 @@ public class Player extends Actor
     
     // Textbox 
     private boolean moreThanOne = false;
-    public boolean shouldMove = true; 
+    
     public Player() {
         setImage("SRight.png");
         direction = 'r';
@@ -52,7 +52,7 @@ public class Player extends Actor
             movement();
             attack();
             createObjectText();
-            this.shouldMove = shouldMove;
+            getWorld().setPaintOrder(Player.class);
         }
     }
     public void interact() {
@@ -90,12 +90,12 @@ public class Player extends Actor
             dashingTime = 8; // give count down dashingTime + prevent spamming dash (no need boolean)
             dashCD = 150; // set CD + prevent spamming dash (no need boolean)
         }
-        if (dashingTime == 0 && Greenfoot.isKeyDown("left") && shouldMove){
+        if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
             setLocation(getX() - hSpeed, getY());
             setImage("SLeft.png");
             direction = 'l';
         }
-        if (dashingTime == 0 && Greenfoot.isKeyDown("right") && shouldMove) {
+        if (dashingTime == 0 && Greenfoot.isKeyDown("right")) {
             setLocation(getX() + hSpeed, getY());
             setImage("SRight.png");
             direction = 'r';
@@ -132,8 +132,7 @@ public class Player extends Actor
         if (isTouching(ObjectNpc.class) &&Greenfoot.isKeyDown("e") && !moreThanOne){
             getWorld().addObject(new TextBox(), 300, 200);
             moreThanOne = true;
-            hSpeed = 0;
-            shouldMove = false;
+            enable = false;
         }
 //        if (){
 //            shouldMove = true;
