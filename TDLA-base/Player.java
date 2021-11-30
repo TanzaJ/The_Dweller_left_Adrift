@@ -24,7 +24,7 @@ public class Player extends Actor
     private int menuWaitTime = 0; // time before can press esc again
     
     // Textbox 
-    private boolean moreThanOne = false;
+    private static boolean moreThanOne = false;
     
     public Player() {
         setImage("SRight.png");
@@ -53,6 +53,7 @@ public class Player extends Actor
             attack();
             createObjectText();
             getWorld().setPaintOrder(Player.class);
+            viewMoreThanOne();
         }
     }
     public void interact() {
@@ -127,9 +128,11 @@ public class Player extends Actor
     public static void setEnable(boolean state) {
         enable = state;
     }
-    
+    public static boolean viewMoreThanOne(){
+        return moreThanOne;
+    }
         public void createObjectText(){
-        if (isTouching(ObjectNpc.class) &&Greenfoot.isKeyDown("e") && !moreThanOne){
+        if (isTouching(ObjectNpc.class) && Greenfoot.isKeyDown("e") && !moreThanOne){
             getWorld().addObject(new TextBox(), 300, 200);
             moreThanOne = true;
             enable = false;
