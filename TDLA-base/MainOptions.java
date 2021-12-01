@@ -18,4 +18,9 @@ public class MainOptions extends World
     {    
         super(WIDTH, HEIGHT, 1);
     }
+    
+    public void act() 
+    {
+        addObject(new MenuArrowButton(), 50, HEIGHT - 50);
+    }
 }
