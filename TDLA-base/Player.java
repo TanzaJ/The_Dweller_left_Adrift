@@ -23,8 +23,10 @@ public class Player extends Actor
     private static boolean enable = true;
     private int menuWaitTime = 0; // time before can press esc again
     
+    //Collisions
+    private Floor floor = new Floor();
     // Textbox 
-    private static boolean moreThanOne = false;
+    private static boolean moreThanOne;
     
     public Player() {
         setImage("SRight.png");
@@ -51,7 +53,6 @@ public class Player extends Actor
             interact();
             movement();
             attack();
-            createObjectText();
             getWorld().setPaintOrder(Player.class);
             viewMoreThanOne();
         }
@@ -66,7 +67,6 @@ public class Player extends Actor
         setLocation(getX(), getY() + vSpeed); // gravity
         World world = (ImageScrollWorld)getWorld();
         int groundHeight = 50;
-        
         if (getY() > world.getHeight() - groundHeight) {
             vSpeed = 0; // kill vertical speed
             onGround = true; // on ground
@@ -112,7 +112,19 @@ public class Player extends Actor
             // upper slash goes here
         }
     }
-    
+    /**
+     * Overrides setLocation to create collision with Objects
+     */
+    public void setLocation(int x, int y){
+        int oldX = getX();
+        int oldY = getY();
+        super.setLocation(x, y);
+        if(!getIntersectingObjects(Collisions.class).isEmpty())  // change the "Desk.class" to your class that you want your character to not interact with / not walk through
+        {
+            super.setLocation(oldX, oldY);
+        }
+    }        
+
     /**
      * Perform Gif Animation / set Gif Animation
      * 
@@ -131,15 +143,4 @@ public class Player extends Actor
     public static boolean viewMoreThanOne(){
         return moreThanOne;
     }
-        public void createObjectText(){
-        if (isTouching(ObjectNpc.class) && Greenfoot.isKeyDown("e") && !moreThanOne){
-            getWorld().addObject(new TextBox(), 300, 200);
-            moreThanOne = true;
-            enable = false;
-        }
-//        if (){
-//            shouldMove = true;
-//        }
-    }
-    
 }

@@ -1,20 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Collisions here.
+ * Write a description of class Floor here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Collisions extends Actor
+public class Floor extends Collisions
 {
     /**
-     * Act - do whatever the Collisions wants to do. This method is called whenever
+     * Act - do whatever the Floor wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act()
     {
         // Add your action code here.
     }
-    
 }

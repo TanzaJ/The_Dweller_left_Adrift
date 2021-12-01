@@ -9,27 +9,35 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class ObjectNpc extends Actor
 
 {
-    private int isTouchingPlayer = 0; // To check if player is near Npc
+     // To check if player is near Npc
     private InteractIcon interactIcon = new InteractIcon();
     private int spawn1 = 0;
+    private boolean isSpoken; //already speak or not
+    public ObjectNpc(){
+         boolean isSpoken;
+    }
     public void act(){
         check();
         displayInteract();
+        createObjectText();
     }
     
     public void check(){
-        if (isTouchingPlayer == 0 && isTouching(Player.class)){
+        if (!isSpoken && isTouching(Player.class)){
             getWorld().addObject(interactIcon, this.getX(), this.getY() - 100);
         }
-        if (Player.viewMoreThanOne()){
-            isTouchingPlayer = 1;
-        }
-        if (!isTouching(Player.class) || isTouchingPlayer == 1){
+        if (!isTouching(Player.class)){
             getWorld().removeObject(interactIcon);
         }
 
         }
-    
+    public void createObjectText(){
+        if (isTouching(Player.class) && Greenfoot.isKeyDown("e") && !isSpoken){
+            getWorld().addObject(new TextBox(), 300, 200);
+            isSpoken = true;
+            Player.setEnable(false);
+        }
+    }
     public void displayInteract(){
     }
 }
