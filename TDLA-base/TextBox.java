@@ -22,10 +22,10 @@ public class TextBox extends Objects
      */
     public void act()
     {
-        Textbox();
-        Text();
+        textbox();
+        text();
     }
-    public void Textbox(){
+    public void textbox(){
         if (!isPressed && Greenfoot.isKeyDown("e") && i < texts.length - 1){
             i++;
             isPressed = true;
@@ -35,7 +35,7 @@ public class TextBox extends Objects
         }
     }
     
-    public void Text(){
+    public void text(){
         getWorld().showText(texts[i], this.getX() + 5, this.getY() - 5 );
         if (i == texts.length - 1){
             getWorld().removeObject(this);

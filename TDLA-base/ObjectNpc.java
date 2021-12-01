@@ -30,7 +30,7 @@ public class ObjectNpc extends Actor
             getWorld().removeObject(interactIcon);
         }
 
-        }
+    }
     public void createObjectText(){
         if (isTouching(Player.class) && Greenfoot.isKeyDown("e") && !isSpoken){
             getWorld().addObject(new TextBox(), 300, 200);
