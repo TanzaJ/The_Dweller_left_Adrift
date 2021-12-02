@@ -43,6 +43,7 @@ public class ImageScrollWorld extends World
     public int getGroundHeight() {
         return groundHeight;
     }
+    
     /**
      * Prepare the world for the start of the program.
      * That is: create the initial objects and add them to the world.
@@ -51,5 +52,7 @@ public class ImageScrollWorld extends World
     {
         ObjectNpc objectNpc = new ObjectNpc();
         addObject(objectNpc,566,516);
+        Floor floor = new Floor();
+        addObject(floor,271,562);
     }
 }

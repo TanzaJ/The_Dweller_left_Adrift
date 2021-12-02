@@ -67,7 +67,7 @@ public class Player extends Actor
         setLocation(getX(), getY() + vSpeed); // gravity
         World world = (ImageScrollWorld)getWorld();
         int groundHeight = 50;
-        if (getY() > world.getHeight() - groundHeight) {
+        if (getY() > world.getHeight() - groundHeight ) {
             vSpeed = 0; // kill vertical speed
             onGround = true; // on ground
             setLocation(getX(), world.getHeight() - groundHeight); // position player

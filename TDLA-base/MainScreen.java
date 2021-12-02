@@ -26,7 +26,7 @@ public class MainScreen extends World
      */
     private void prepare()
     {
-        
+
     }
     
     public void act() 
