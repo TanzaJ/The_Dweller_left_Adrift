@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class TextBox extends Objects
 {
-    private String[] texts = {"", "hello", "This a test","die in a fire", null};
+    public static String[] texts = {"", "hello", "This a test","Which came first the fruit or the color orange?", null};
     private int i;
     private boolean isPressed = false;
     private boolean exists = false;
@@ -42,5 +42,5 @@ public class TextBox extends Objects
             Player.setEnable(true);
         }
     }
-
+    
 }

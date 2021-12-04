@@ -22,7 +22,7 @@ public class Player extends Actor
     private char direction;
     private static boolean enable = true;
     private int menuWaitTime = 0; // time before can press esc again
-    
+    private boolean onGround = false;
     //Collisions
     private Floor floor = new Floor();
     // Textbox 
@@ -62,12 +62,12 @@ public class Player extends Actor
     }
     public void movement() {
         //move vertically :
-        boolean onGround = false; //stand on a platform = remove gravity effect
+         //stand on a platform = remove gravity effect
         vSpeed++; // change gravity (failing faster after a while on air)
         setLocation(getX(), getY() + vSpeed); // gravity
-        World world = (ImageScrollWorld)getWorld();
+        World world = (Lvl1)getWorld();
         int groundHeight = 50;
-        if (getY() > world.getHeight() - groundHeight ) {
+        if (getY() > world.getHeight() - groundHeight || getOneObjectAtOffset(0, getImage().getHeight()/2+1, Floor.class) != null) {
             vSpeed = 0; // kill vertical speed
             onGround = true; // on ground
             setLocation(getX(), world.getHeight() - groundHeight); // position player
@@ -83,13 +83,13 @@ public class Player extends Actor
         if (dashingTime == 0) 
             hSpeed = 2; // if not dashing, speed set to 2 (speed may change in future)
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-            int accelaration = 10;
+            int accelaration = 30;
             if (direction == 'r') 
                 hSpeed = accelaration;
             else
                 hSpeed = -accelaration;
             dashingTime = 8; // give count down dashingTime + prevent spamming dash (no need boolean)
-            dashCD = 150; // set CD + prevent spamming dash (no need boolean)
+            dashCD = 50; // set CD + prevent spamming dash (no need boolean)
         }
         if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
             setLocation(getX() - hSpeed, getY());
@@ -122,6 +122,10 @@ public class Player extends Actor
         if(!getIntersectingObjects(Collisions.class).isEmpty())  // change the "Desk.class" to your class that you want your character to not interact with / not walk through
         {
             super.setLocation(oldX, oldY);
+            onGround = true;
+        }
+        else {
+            onGround = false;
         }
     }        
 
