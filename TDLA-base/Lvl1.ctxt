@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Lvl1
+comment0.text=\r\n\ creates\ a\ limited\ (to\ scrolling\ background\ image\ size)\ center\ screen\ actor\ followin\ scrollin\ world\r\n\ \r\n\ @author\ danpost\r\n
+comment1.params=
+comment1.target=Lvl1()
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ scroll()
+comment4.params=
+comment4.target=int\ getGroundHeight()
+comment5.params=
+comment5.target=void\ prepare()
+comment5.text=\r\n\ Prepare\ the\ world\ for\ the\ start\ of\ the\ program.\r\n\ That\ is\:\ create\ the\ initial\ objects\ and\ add\ them\ to\ the\ world.\r\n
+numComments=6
