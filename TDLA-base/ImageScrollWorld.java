@@ -31,7 +31,7 @@ public class ImageScrollWorld extends World
     public void act() {
         if (scrollActor != null) scroll();
         if (EscMenu.class != null)
-            setPaintOrder(EscMenu.class);
+            setPaintOrder(MenuArrowButton.class, EscMenu.class);
     }
 
     //attempts scrolling when actor is not in center of visible world

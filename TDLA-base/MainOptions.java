@@ -21,6 +21,9 @@ public class MainOptions extends World
     
     public void act() 
     {
-        addObject(new MenuArrowButton(), 50, HEIGHT - 50);
+        addObject(new MenuArrowButton("MainScreen"), 50, HEIGHT - 50);
+        addObject(new InstructionsButton(), getWidth() / 2, 100);
+        showText("Volume (Disabled)", getWidth() / 2, 200);
+        showText("Visual (Disabled)", getWidth() / 2, 300);
     }
 }

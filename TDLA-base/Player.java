@@ -57,7 +57,7 @@ public class Player extends Actor
             if (menuWaitTime > 0) 
                 menuWaitTime--; // only decrease when enable and time > 0
             if (menuWaitTime == 0 && Greenfoot.isKeyDown("escape")) {
-                getWorld().addObject(new EscMenu(), 300, 300);
+                getWorld().addObject(new EscMenu(), getWorld().getWidth() / 2, getWorld().getHeight() / 2);
                 enable = false; // set enable
                 menuWaitTime = 40; // set wait time
             }
@@ -82,14 +82,14 @@ public class Player extends Actor
         vSpeed++; // change gravity (failing faster after a while on air)
         setLocation(getX(), getY() + vSpeed); // gravity
         //World world = (Lvl1)getWorld();
-        World world = (Lvl1)getWorld();
+        World world = (ImageScrollWorld)getWorld(); // for the game not crashing (temp).
         int groundHeight = 50;
         if (getY() > world.getHeight() - groundHeight || getOneObjectAtOffset(0, getImage().getHeight() / 2 + 1, Floor.class) != null) {
             vSpeed = 0; // kill vertical speed
             onGround = true; // on ground
             setLocation(getX(), world.getHeight() - groundHeight); // position player
         }
-        if (!upPressed && onGround && Greenfoot.isKeyDown("space")){
+        if (!upPressed && onGround  && Greenfoot.isKeyDown("space")){
             vSpeed = -15; // adjust initial jump speed as needed
             upPressed = true;
         }

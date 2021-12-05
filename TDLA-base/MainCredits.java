@@ -21,6 +21,10 @@ public class MainCredits extends World
     
     public void act() 
     {
-        addObject(new MenuArrowButton(), 50, HEIGHT - 50);
+        addObject(new MenuArrowButton("MainScreen"), 50, HEIGHT - 50);
+        showText("Credits:", getWidth() / 2, 100);
+        showText("James K. : ", getWidth() / 2, 150);
+        showText("Philip D. : ", getWidth() / 2, 200);
+        showText("Vinh M. : ", getWidth() / 2, 250);
     }
 }
