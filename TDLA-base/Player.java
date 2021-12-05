@@ -82,7 +82,7 @@ public class Player extends Actor
         vSpeed++; // change gravity (failing faster after a while on air)
         setLocation(getX(), getY() + vSpeed); // gravity
         //World world = (Lvl1)getWorld();
-        World world = (ImageScrollWorld)getWorld();
+        World world = (Lvl1)getWorld();
         int groundHeight = 50;
         if (getY() > world.getHeight() - groundHeight || getOneObjectAtOffset(0, getImage().getHeight() / 2 + 1, Floor.class) != null) {
             vSpeed = 0; // kill vertical speed
@@ -141,9 +141,9 @@ public class Player extends Actor
             super.setLocation(oldX, oldY);
             onGround = true;
         }
-        //else {
-        //    onGround = true;
-        //}
+        else {
+            onGround = false;
+        }
     }        
 
     /**
