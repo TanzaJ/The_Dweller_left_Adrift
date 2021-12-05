@@ -20,30 +20,46 @@ public class Player extends Actor
                              // Set default animation/image in constructor, then no more change without Actions/Controls
                              // If no gif in future, make int delay animation variable = delay each image ();
     private char direction;
-    private static boolean enable = true;
+    private static boolean enable;
     private int menuWaitTime = 0; // time before can press esc again
-    private boolean onGround = false;
+    private boolean onGround;
     //Collisions
     private Floor floor = new Floor();
     // Textbox 
     private static boolean moreThanOne;
     
+    //Player stats:
+    private final double maxHp = 100; // MaxHp + pre-initial (only for hpbar creation)
+    private double hp = 100; // create hp variable + pre-initial (for hpBar creation)
+    private double armor; // create armor variable
+    private double lightDmg; // create lightDmg variable
+    private double heavyDmg; // create heavyDmg variable
+    
     public Player() {
+        //initialize stats:
+        hp = 100;
+        armor = 25;
+        lightDmg = 25;
+        heavyDmg = 75;
+        
         setImage("SRight.png");
         direction = 'r';
+        enable = true;
+        upPressed = false;
     }
     public void returnSpeed(){
     
     }
     public void act()
     {
+
         if (enable) {
             if (menuWaitTime > 0) 
-                menuWaitTime--; // only decrease when enabled again
+                menuWaitTime--; // only decrease when enable and time > 0
             if (menuWaitTime == 0 && Greenfoot.isKeyDown("escape")) {
-                getWorld().addObject(new Menu(), 300, 300);
+                getWorld().addObject(new EscMenu(), 300, 300);
                 enable = false; // set enable
-                menuWaitTime = 50; // set wait time
+                menuWaitTime = 40; // set wait time
             }
             if (dashCD > 0) dashCD--;
             if (dashingTime > 0) {
@@ -65,9 +81,10 @@ public class Player extends Actor
          //stand on a platform = remove gravity effect
         vSpeed++; // change gravity (failing faster after a while on air)
         setLocation(getX(), getY() + vSpeed); // gravity
-        World world = (Lvl1)getWorld();
+        //World world = (Lvl1)getWorld();
+        World world = (ImageScrollWorld)getWorld();
         int groundHeight = 50;
-        if (getY() > world.getHeight() - groundHeight || getOneObjectAtOffset(0, getImage().getHeight()/2+1, Floor.class) != null) {
+        if (getY() > world.getHeight() - groundHeight || getOneObjectAtOffset(0, getImage().getHeight() / 2 + 1, Floor.class) != null) {
             vSpeed = 0; // kill vertical speed
             onGround = true; // on ground
             setLocation(getX(), world.getHeight() - groundHeight); // position player
@@ -83,13 +100,13 @@ public class Player extends Actor
         if (dashingTime == 0) 
             hSpeed = 2; // if not dashing, speed set to 2 (speed may change in future)
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-            int accelaration = 30;
+            int accelaration = 10;
             if (direction == 'r') 
                 hSpeed = accelaration;
             else
                 hSpeed = -accelaration;
-            dashingTime = 8; // give count down dashingTime + prevent spamming dash (no need boolean)
-            dashCD = 50; // set CD + prevent spamming dash (no need boolean)
+            dashingTime = 15; // give count down dashingTime + prevent spamming dash (no need boolean)
+            dashCD = 90; // set CD + prevent spamming dash (no need boolean)
         }
         if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
             setLocation(getX() - hSpeed, getY());
@@ -124,9 +141,9 @@ public class Player extends Actor
             super.setLocation(oldX, oldY);
             onGround = true;
         }
-        else {
-            onGround = false;
-        }
+        //else {
+        //    onGround = true;
+        //}
     }        
 
     /**
@@ -146,5 +163,41 @@ public class Player extends Actor
     }
     public static boolean viewMoreThanOne(){
         return moreThanOne;
+    }
+    
+    //Getter && Setter stats
+    public int getMaxHp() {
+        return (int) maxHp;
+    }
+    public int getHp() {
+        return (int) hp;
+    }
+    
+    public double getArmor() {
+        return armor;
+    }
+    
+    public double getLightDmg() {
+        return lightDmg;
+    }
+    
+    public double getHeavyDmg() {
+        return heavyDmg;
+    }
+    
+    public void setHp(double newHp) {
+        hp = newHp;
+    }
+    
+    public void setArmor(double newArmor) {
+        armor = newArmor;
+    }
+    
+    public void setLightDmg(double newDmg) {
+        lightDmg = newDmg;
+    }
+    
+    public void setHeavyDmg(double newDmg) {
+        heavyDmg = newDmg;
     }
 }

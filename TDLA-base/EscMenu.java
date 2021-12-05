@@ -6,9 +6,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Menu extends Actor
+public class EscMenu extends Menus
 {
-    private int menuWaitTime = 100; //before can press esc again
+    private int menuWaitTime = 40; //before can press esc again
     
     /**
      * Act - do whatever the Menu wants to do. This method is called whenever
