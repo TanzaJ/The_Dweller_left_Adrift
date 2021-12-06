@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Write a description of class MenuArrowButton here.
@@ -8,6 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class MenuArrowButton extends Menus
 {   
+    private int menuWaitTime = 40; //before can press esc again
     String name;
     public MenuArrowButton(String name) 
     {
@@ -29,10 +31,16 @@ public class MenuArrowButton extends Menus
                 case "MainScreen":
                     Greenfoot.setWorld(new MainScreen());
                     break;
-                case "EscMenu1":
-                    Greenfoot.setWorld(new ImageScrollWorld());
+                //case "EscMenu1":
+                    //getWorld().removeObject(this);    
             }
             // this.setImage("ArrowMenuButton.png");
         }
+
+    }
+    
+    public void removeSelf() {
+       // getWorld().showText("2", 500, 500);
+       // getWorld().removeObject(this);
     }
 }

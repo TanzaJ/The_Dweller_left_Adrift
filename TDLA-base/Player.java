@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Write a description of class Player here.
@@ -22,7 +23,6 @@ public class Player extends Actor
     private char direction;
     private static boolean enable;
     private int menuWaitTime = 0; // time before can press esc again
-    private boolean onGround;
     //Collisions
     private Floor floor = new Floor();
     // Textbox 
@@ -48,11 +48,11 @@ public class Player extends Actor
         upPressed = false;
     }
     public void returnSpeed(){
-    
+        
+        
     }
     public void act()
     {
-
         if (enable) {
             if (menuWaitTime > 0) 
                 menuWaitTime--; // only decrease when enable and time > 0
@@ -63,39 +63,79 @@ public class Player extends Actor
             }
             if (dashCD > 0) dashCD--;
             if (dashingTime > 0) {
-                 dashingTime--;
-                 setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
+                dashingTime--;
+                //if (o
+                setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
             }
             interact();
             movement();
             attack();
             getWorld().setPaintOrder(Player.class);
             viewMoreThanOne();
+            fall();
+            getWorld().showText("" + getY(), 300, 500);
         }
     }
     public void interact() {
+
+    }
+    
+    /**
+     * checking if is on ground (platform)
+     */
+    public boolean isOnGround() {
+        boolean onGround = false;
+
+        int imageWidth = getImage().getWidth(); //will change later, this must = width of standing img
+        int imageHeight = getImage().getHeight();
+
+        //Actor curPlatform = getOneIntersectingObject(Floor.class);
+        if ((getOneObjectAtOffset(imageWidth / -2, imageHeight / 2, Floor.class) != null ||
+            getOneObjectAtOffset(imageWidth / 2, imageHeight / 2, Floor.class) != null)) {
+            onGround = true;
+        }
+        return onGround;
+    }
+    
+    /**
+     * checking if bumped head or not
+     */
+    public boolean isBumpedHead() {
+        boolean bumpedHead = false;
         
+        int imageWidth = getImage().getWidth(); //will change later, this must = width of standing img
+        int imageHeight = getImage().getHeight();
+        
+        if (getOneObjectAtOffset(imageWidth / -2, imageHeight / -2, Floor.class) != null ||
+            getOneObjectAtOffset(imageWidth / 2, imageHeight / -2, Floor.class) != null) {
+            bumpedHead = true; // bumped
+        }
+        
+        return bumpedHead;
+    }
+    
+    public void fall() {
+        setLocation(getX(), getY() + vSpeed);
+        if (isOnGround()) {
+             vSpeed = 0;
+             while (isOnGround()) setLocation(getX(), getY() - 1);
+             setLocation(getX(), getY() + 1);
+        } 
+        else if (vSpeed < 0 && 
+        isBumpedHead()) vSpeed = 0;
+        else vSpeed++;
     }
     public void movement() {
         //move vertically :
-         //stand on a platform = remove gravity effect
-        vSpeed++; // change gravity (failing faster after a while on air)
-        setLocation(getX(), getY() + vSpeed); // gravity
-        //World world = (Lvl1)getWorld();
-        World world = (ImageScrollWorld)getWorld(); // for the game not crashing (temp).
-        int groundHeight = 50;
-        if (getY() > world.getHeight() - groundHeight || getOneObjectAtOffset(0, getImage().getHeight() / 2 + 1, Floor.class) != null) {
-            vSpeed = 0; // kill vertical speed
-            onGround = true; // on ground
-            setLocation(getX(), world.getHeight() - groundHeight); // position player
-        }
-        if (!upPressed && onGround  && Greenfoot.isKeyDown("space")){
-            vSpeed = -15; // adjust initial jump speed as needed
+        int jumpHeight = -15;
+        if (isOnGround()  && Greenfoot.isKeyDown("space")){
+            vSpeed = jumpHeight;
             upPressed = true;
         }
         if (upPressed && !Greenfoot.isKeyDown("space")){
             upPressed = false;
         }
+        
         // move horizontally :
         if (dashingTime == 0) 
             hSpeed = 2; // if not dashing, speed set to 2 (speed may change in future)
@@ -129,31 +169,15 @@ public class Player extends Actor
             // upper slash goes here
         }
     }
-    /**
-     * Overrides setLocation to create collision with Objects
-     */
-    public void setLocation(int x, int y){
-        int oldX = getX();
-        int oldY = getY();
-        super.setLocation(x, y);
-        if(!getIntersectingObjects(Collisions.class).isEmpty())  // change the "Desk.class" to your class that you want your character to not interact with / not walk through
-        {
-            super.setLocation(oldX, oldY);
-            onGround = true;
-        }
-        else {
-            onGround = false;
-        }
-    }        
-
+ 
     /**
      * Perform Gif Animation / set Gif Animation
      * 
      * @param image image's name + .extesion
      */
-    public void setGifAni(GifImage image) {
-        setImage(image.getCurrentImage());
-    }
+    //public void setGifAni(GifImage image) {
+    //    setImage(image.getCurrentImage());
+    //}
     
     /**
      * enable setter

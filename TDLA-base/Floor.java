@@ -8,12 +8,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Floor extends Collisions
 {
-    /**
-     * Act - do whatever the Floor wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    public Floor(int width, int height) {
+        getImage().scale(width, height);
+    }
+    public Floor() {
+        this(100, 200);
+    }
     public void act()
     {
-        // Add your action code here.
+        
     }
 }

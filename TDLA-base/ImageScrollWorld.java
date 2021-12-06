@@ -9,23 +9,32 @@ public class ImageScrollWorld extends World
 {
     public static final int WIDTH = 900; // world width (viewport)
     public static final int HEIGHT = 600; // world height (view port)
-    private int groundHeight = 50;
+    private int groundHeight;
     private Scroller scroller; // object that performs the scrolling
     Actor scrollActor; // an actor to stay in view
-
+    GreenfootImage bg;
+    
     public ImageScrollWorld()
     {    
         super(WIDTH, HEIGHT, 1, false);  // creates an bounded world
-        GreenfootImage bg = new GreenfootImage("bg.png"); // creates the image to scroll
+        //Scroller world stuff
+        groundHeight = 43; //depends on image, groundheigh might be change
+        
+        bg = new GreenfootImage("bg.png"); // creates the image to scroll
         int bgWide = bg.getWidth(); // scrolling image width
         int bgHigh = bg.getHeight(); // scrolling image height
         scroller = new Scroller(this, bg, bgWide, bgHigh); // creates the Scroller object
         scrollActor = new Player(); // creates the actor to maintain view on
-        addObject(scrollActor, bgWide / 2, bgHigh - groundHeight); //add actor to world (wherever)
-        addObject(new HpBar("", ""), 0, 0);
+        addObject(scrollActor, bgWide / 2, HEIGHT); //add actor to world (wherever)
         scroll(); // sets initial background image and puts main actor in view if needed
-        setPaintOrder(Player.class, HpBar.class, Enemy.class, InteractIcon.class);
         prepare();
+        
+        //Other Stuffs:
+        Floor ground = new Floor(bgWide, groundHeight);
+        ground.getImage().setTransparency(0);
+        addObject(ground, WIDTH / 2, HEIGHT);
+        setPaintOrder(Player.class, HpBar.class, Enemy.class, InteractIcon.class);
+        addObject(new HpBar("", ""), 0, 0); // adding hpBar, dont mind the 2 string, it does nothing, but does important, so dont touch it
     }
 
     public void act() {
@@ -41,10 +50,6 @@ public class ImageScrollWorld extends World
         int dsy = scrollActor.getY() - HEIGHT / 2; //vertical offset from center screen
         scroller.scroll(dsx, dsy);
     }
-
-    public int getGroundHeight() {
-        return groundHeight;
-    }
     
     /**
      * Prepare the world for the start of the program.
@@ -53,6 +58,18 @@ public class ImageScrollWorld extends World
     private void prepare()
     {
         addObject(new Npc(),566,516);
-        addObject(new Floor(),150,537);
+        addObject(new Floor(),150,480);
+    }
+    
+    public int getGroundHeight() {
+        return groundHeight;
+    }
+    
+    public int getBgWidth() {
+        return bg.getWidth();
+    }
+    
+    public int getBgHeight() {
+        return bg.getHeight();
     }
 }
