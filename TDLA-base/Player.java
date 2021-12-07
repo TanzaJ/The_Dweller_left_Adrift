@@ -128,7 +128,7 @@ public class Player extends Actor
     public void movement() {
         //move vertically :
         int jumpHeight = -15;
-        if (isOnGround()  && Greenfoot.isKeyDown("space")){
+        if (isOnGround()  && Greenfoot.isKeyDown("space") && !upPressed){
             vSpeed = jumpHeight;
             upPressed = true;
         }

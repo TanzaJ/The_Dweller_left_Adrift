@@ -59,6 +59,8 @@ public class ImageScrollWorld extends World
     {
         addObject(new Npc(),566,516);
         addObject(new Floor(),150,480);
+        HpBar hpBar = new HpBar("", "");
+        addObject(hpBar,449,463);
     }
     
     public int getGroundHeight() {
