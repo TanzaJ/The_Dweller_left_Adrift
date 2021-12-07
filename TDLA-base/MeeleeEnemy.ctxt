@@ -1,17 +1,19 @@
 #BlueJ class context
-comment0.target=Enemy
+comment0.target=MeeleeEnemy
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ Enemy\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=type\ level
-comment1.target=Enemy(int,\ int)
-comment1.text=\r\n\ @param\ type\ 1\ \=\ ground,\ 2\ \=\ fy\r\n\ @param\ level\ monster's\ lv\r\n
+comment1.params=level
+comment1.target=MeeleeEnemy(int)
+comment1.text=\r\n\ @param\ level\ monster's\ lv\r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
 comment3.target=void\ move()
 comment4.params=
-comment4.target=void\ isSpot()
+comment4.target=boolean\ isSpot()
 comment5.params=
-comment5.target=void\ attack()
+comment5.target=boolean\ isAttacking()
 comment6.params=
-comment6.target=void\ beHit()
-numComments=7
+comment6.target=void\ attack()
+comment7.params=
+comment7.target=void\ setAnimation()
+numComments=8

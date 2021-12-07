@@ -14,7 +14,6 @@ public class TextBox extends Objects
     private boolean exists = false;
     
     public TextBox(){
-        
     }
     /**
      * Act - do whatever the text wants to do. This method is called whenever
@@ -22,6 +21,7 @@ public class TextBox extends Objects
      */
     public void act()
     {
+        getImage().scale(getWorld().getWidth(), 150);
         textbox();
         text();
     }
