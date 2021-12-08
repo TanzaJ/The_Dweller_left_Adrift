@@ -23,8 +23,7 @@ public class Player extends Actor
     private char direction;
     private static boolean enable;
     private int menuWaitTime = 0; // time before can press esc again
-    //Collisions
-    private Floor floor = new Floor();
+
     // Textbox 
     private static boolean moreThanOne;
     
@@ -54,6 +53,7 @@ public class Player extends Actor
     public void act()
     {
         if (enable) {
+            getWorld().setPaintOrder(Player.class);
             if (menuWaitTime > 0) 
                 menuWaitTime--; // only decrease when enable and time > 0
             if (menuWaitTime == 0 && Greenfoot.isKeyDown("escape")) {
@@ -65,99 +65,157 @@ public class Player extends Actor
             if (dashingTime > 0) {
                 dashingTime--;
                 //if (o
-                setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
+                if (!checkLeftWall())
+                    setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
             }
+            
+            checkKey(); 
             interact();
-            movement();
-            attack();
-            getWorld().setPaintOrder(Player.class);
-            viewMoreThanOne();
             fall();
-            getWorld().showText("" + getY(), 300, 500);
+            attack();
+            viewMoreThanOne();
+            getWorld().showText("" + checkBumped(), 500, 500);
         }
     }
+    /**
+     * horizontal move method
+     */
+    public void hMove () {
+        setLocation(getX() + hSpeed, getY());
+    }
+    
     public void interact() {
 
     }
     
     /**
+     * checking if touching wall
+     */
+    public boolean checkRightWall() {
+        int w = getImage().getWidth(); 
+        int h = getImage().getHeight();
+        
+        if (hSpeed > 0 && 
+           (getOneObjectAtOffset(w / 2 + 2, h * -1/3, Collisions.class)) != null ||
+            getOneObjectAtOffset(w / 2 + 1, 0, Collisions.class) != null ||
+            getOneObjectAtOffset(w / 2 + 2, h * 1/3, Collisions.class) != null || 
+            getOneObjectAtOffset(w / 2 + 1, h / -2, Collisions.class) != null) {
+                return true;        
+        }
+        return false;
+    }
+    public boolean checkLeftWall() {
+        int w = getImage().getWidth(); 
+        int h = getImage().getHeight();
+        
+        if (hSpeed < 0 && 
+           (getOneObjectAtOffset(w / -2 - 2, h * -1/3, Collisions.class)) != null ||
+            getOneObjectAtOffset(w / -2 - 1, 0, Collisions.class) != null ||
+            getOneObjectAtOffset(w / -2 - 2, h * 1/3, Collisions.class) != null ||
+            getOneObjectAtOffset(w / -2 - 1, h / -2, Floor.class) != null) {
+                return true;
+        }
+        return false;
+    }
+    
+    /**
      * checking if is on ground (platform)
      */
-    public boolean isOnGround() {
-        boolean onGround = false;
+    public boolean checkGround() {
+        int w = getImage().getWidth(); 
+        int h = getImage().getHeight();
 
-        int imageWidth = getImage().getWidth(); //will change later, this must = width of standing img
-        int imageHeight = getImage().getHeight();
-
-        //Actor curPlatform = getOneIntersectingObject(Floor.class);
-        if ((getOneObjectAtOffset(imageWidth / -2, imageHeight / 2, Floor.class) != null ||
-            getOneObjectAtOffset(imageWidth / 2, imageHeight / 2, Floor.class) != null)) {
-            onGround = true;
+        if ((getOneObjectAtOffset(w / -2 + 10, h / 2, Collisions.class) != null ||
+            getOneObjectAtOffset(w / 2 - 10, h / 2, Collisions.class) != null)) {
+            return true;
         }
-        return onGround;
+        return false;
     }
     
     /**
      * checking if bumped head or not
      */
-    public boolean isBumpedHead() {
-        boolean bumpedHead = false;
+    public boolean checkBumped() {
+        int w = getImage().getWidth(); //will change later, this must = width of standing img
+        int h = getImage().getHeight();
         
-        int imageWidth = getImage().getWidth(); //will change later, this must = width of standing img
-        int imageHeight = getImage().getHeight();
-        
-        if (getOneObjectAtOffset(imageWidth / -2, imageHeight / -2, Floor.class) != null ||
-            getOneObjectAtOffset(imageWidth / 2, imageHeight / -2, Floor.class) != null) {
-            bumpedHead = true; // bumped
+        if (vSpeed < 0 && 
+            (getOneObjectAtOffset(w / -2 + 2, h / -2 - 3, Floor.class) != null ||
+            getOneObjectAtOffset(w / 2 - 2, h / -2 - 3, Floor.class) != null)) {
+            return true;
         }
-        
-        return bumpedHead;
+        return false;
     }
     
     public void fall() {
         setLocation(getX(), getY() + vSpeed);
-        if (isOnGround()) {
+        if (checkGround()) {
              vSpeed = 0;
-             while (isOnGround()) setLocation(getX(), getY() - 1);
+             while (checkGround()) setLocation(getX(), getY() - 1);
              setLocation(getX(), getY() + 1);
-        } 
-        else if (vSpeed < 0 && 
-        isBumpedHead()) vSpeed = 0;
+        } else if (checkBumped()) vSpeed = 0;
         else vSpeed++;
     }
-    public void movement() {
-        //move vertically :
-        int jumpHeight = -15;
-        if (isOnGround()  && Greenfoot.isKeyDown("space") && !upPressed){
-            vSpeed = jumpHeight;
-            upPressed = true;
+    
+    public void checkKey() {
+        //horizontal move
+        if (!checkLeftWall() && dashingTime == 0 && Greenfoot.isKeyDown("left")) {
+             hSpeed = -2;
+             direction = 'l';
+             hMove();
         }
-        if (upPressed && !Greenfoot.isKeyDown("space")){
-            upPressed = false;
+        if (!checkRightWall() && dashingTime == 0 && Greenfoot.isKeyDown("right")) {
+            hSpeed = 2;
+            direction = 'r';
+            hMove();
+        }
+        if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
+            int accelaration = (direction == 'l') ? -10 : 10;
+            hSpeed = accelaration;
+            dashingTime = 15;
+            dashCD = 90;
         }
         
+        //vertical move:
+        int jumpHeight = -15;
+        if (checkGround()  && Greenfoot.isKeyDown("space")){
+            vSpeed = jumpHeight;
+            
+        }
+        
+        
+        //move vertically :
+        //int jumpHeight = -15;
+        //if (isOnGround()  && Greenfoot.isKeyDown("space") && !upPressed){
+        //    vSpeed = jumpHeight;
+        //    upPressed = true;
+        //}
+        //if (upPressed && !Greenfoot.isKeyDown("space")){
+        //    upPressed = false;
+        //}
+        
         // move horizontally :
-        if (dashingTime == 0) 
-            hSpeed = 2; // if not dashing, speed set to 2 (speed may change in future)
-        if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-            int accelaration = 10;
-            if (direction == 'r') 
-                hSpeed = accelaration;
-            else
-                hSpeed = -accelaration;
-            dashingTime = 15; // give count down dashingTime + prevent spamming dash (no need boolean)
-            dashCD = 90; // set CD + prevent spamming dash (no need boolean)
-        }
-        if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
-            setLocation(getX() - hSpeed, getY());
-            setImage("SLeft.png");
-            direction = 'l';
-        }
-        if (dashingTime == 0 && Greenfoot.isKeyDown("right")) {
-            setLocation(getX() + hSpeed, getY());
-            setImage("SRight.png");
-            direction = 'r';
-        }
+        //if (dashingTime == 0) 
+        //    hSpeed = 2; // if not dashing, speed set to 2 (speed may change in future)
+        //if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
+        //    int accelaration = 10;
+        //    if (direction == 'r') 
+        //        hSpeed = accelaration;
+        //    else
+        //        hSpeed = -accelaration;
+        //    dashingTime = 15; // give count down dashingTime + prevent spamming dash (no need boolean)
+        //    dashCD = 90; // set CD + prevent spamming dash (no need boolean)
+        //}
+        //if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
+        //    setLocation(getX() - hSpeed, getY());
+        //    setImage("SLeft.png");
+        //    direction = 'l';
+        //}
+        //if (dashingTime == 0 && Greenfoot.isKeyDown("right")) {
+        //    setLocation(getX() + hSpeed, getY());
+        //    setImage("SRight.png");
+        //    direction = 'r';
+        //}
     }
     
     public void attack() {
@@ -171,13 +229,15 @@ public class Player extends Actor
     }
  
     /**
-     * Perform Gif Animation / set Gif Animation
+     * 
      * 
      * @param image image's name + .extesion
      */
-    //public void setGifAni(GifImage image) {
-    //    setImage(image.getCurrentImage());
-    //}
+    public void setAni() {
+        if (direction == 'l') {
+            if (checkGround())
+        }
+    }
     
     /**
      * enable setter
