@@ -11,19 +11,15 @@ public class Player extends Actor
 {
     private int hSpeed; //horizontal speed (move left + right)
     private int vSpeed = 0; // vertical speed (gravity + jump)
-    private int halfImageX = getImage().getWidth() / 2; // 1/2 current image's width
-    private int halfImageY = getImage().getHeight() / 2; // 1/2 current image's height 
-    private boolean upPressed;
     private int dashCD = 0; // dash cooldown
     private int dashingTime = 0; // positve = dashing state + disable horizontal movements
-    private GifImage gifImg; // For any animation need involves using Gif - Use: assign gifImg first then call setGifAni(...)
-                             // If not gif, can just directly in setImage(file). Not yet sure if all need gif. Will think of it
-                             // Set default animation/image in constructor, then no more change without Actions/Controls
-                             // If no gif in future, make int delay animation variable = delay each image ();
+
     private char direction;
     private static boolean enable;
     private int menuWaitTime = 0; // time before can press esc again
-
+    private static int delayAni = 0;
+    private static GreenfootImage curImg;
+    
     // Textbox 
     private static boolean moreThanOne;
     
@@ -34,6 +30,7 @@ public class Player extends Actor
     private double lightDmg; // create lightDmg variable
     private double heavyDmg; // create heavyDmg variable
     
+    
     public Player() {
         //initialize stats:
         hp = 100;
@@ -42,9 +39,8 @@ public class Player extends Actor
         heavyDmg = 75;
         
         setImage("SRight.png");
-        direction = 'r';
+        direction = 'l';
         enable = true;
-        upPressed = false;
     }
     public void returnSpeed(){
         
@@ -52,6 +48,8 @@ public class Player extends Actor
     }
     public void act()
     {
+        getWorld().showText("" + delayAni, 600, 500);
+        if (delayAni > 0) delayAni--;
         if (enable) {
             getWorld().setPaintOrder(Player.class);
             if (menuWaitTime > 0) 
@@ -68,13 +66,13 @@ public class Player extends Actor
                 if (!checkLeftWall())
                     setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
             }
-            
+            setAni();
             checkKey(); 
             interact();
             fall();
             attack();
             viewMoreThanOne();
-            getWorld().showText("" + checkBumped(), 500, 500);
+            getWorld().showText("" + hSpeed, 500, 500);
         }
     }
     /**
@@ -159,6 +157,7 @@ public class Player extends Actor
     
     public void checkKey() {
         //horizontal move
+        if (!Greenfoot.isKeyDown("left") && !Greenfoot.isKeyDown("right")) hSpeed = 0;
         if (!checkLeftWall() && dashingTime == 0 && Greenfoot.isKeyDown("left")) {
              hSpeed = -2;
              direction = 'l';
@@ -167,6 +166,7 @@ public class Player extends Actor
         if (!checkRightWall() && dashingTime == 0 && Greenfoot.isKeyDown("right")) {
             hSpeed = 2;
             direction = 'r';
+            setImage("RMove1.png");
             hMove();
         }
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
@@ -234,8 +234,68 @@ public class Player extends Actor
      * @param image image's name + .extesion
      */
     public void setAni() {
+        getWorld().showText("" + delayAni, 600, 500);
+        curImg = getImage();
+        if (delayAni > 0) delayAni--;
         if (direction == 'l') {
-            if (checkGround())
+            if (checkGround() && hSpeed == 0) {
+                if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
+                    setImage("LStand1.png");
+                    delayAni = 150;
+                    }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
+                    delayAni = 35;
+                    setImage("LStand2.png");
+                }
+            }
+            
+            // moving
+            if (checkGround() && hSpeed < 0) {
+                boolean equal_to_one = false;
+                for (int i = 1; i <= 8; i++) {
+                    if (ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + i + ".png")))  {
+                        equal_to_one = true;
+                        break;
+                    }
+                }
+                if(!equal_to_one) {
+                    setImage("LMove1.png");
+                    delayAni = 0;
+                }
+                
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove8.png"))) {
+                    setImage("LMove1.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove1.png"))) {
+                    setImage("LMove2.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove2.png"))) {
+                    setImage("LMove3.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove3.png"))) {
+                    setImage("LMove4.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove4.png"))) {
+                    setImage("LMove5.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove5.png"))) {
+                    setImage("LMove6.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove6.png"))) {
+                    setImage("LMove7.png");
+                    delayAni = 10;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove7.png"))) {
+                    setImage("LMove8.png");
+                    delayAni = 10;
+                }
+            }
         }
     }
     
