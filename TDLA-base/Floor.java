@@ -12,7 +12,7 @@ public class Floor extends Collisions
         getImage().scale(width, height);
     }
     public Floor() {
-        this(100, 200);
+        this(100, 50);
     }
     public void act()
     {
