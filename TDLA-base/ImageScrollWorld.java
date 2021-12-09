@@ -34,9 +34,7 @@ public class ImageScrollWorld extends World
         ground.getImage().setTransparency(0);
         addObject(ground, WIDTH / 2, HEIGHT);
         setPaintOrder(Player.class, HpBar.class, MeeleeEnemy.class, InteractIcon.class);
-        addObject(new HpBar("", ""), 0, 0); // adding hpBar, dont mind the 2 string, it does nothing, but does important, so dont touch it
     }
-
     public void act() {
         if (scrollActor != null) scroll();
         if (EscMenu.class != null)
@@ -60,7 +58,7 @@ public class ImageScrollWorld extends World
         addObject(new Npc(),566,550);
         addObject(new Floor(),150,480);
         HpBar hpBar = new HpBar("", "");
-        addObject(hpBar,449,463);
+        addObject(hpBar, scrollActor.getX(), scrollActor.getY() - scrollActor.getImage().getHeight() * 3/4);
     }
     
     public int getGroundHeight() {

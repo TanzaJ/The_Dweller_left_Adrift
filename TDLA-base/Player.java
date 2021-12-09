@@ -18,7 +18,7 @@ public class Player extends Actor
     private static boolean enable;
     private int menuWaitTime = 0; // time before can press esc again
     private static int delayAni = 0;
-    private static GreenfootImage curImg;
+    private int curImg; // use if have more than 2 imgs for animation
     
     // Textbox 
     private static boolean moreThanOne;
@@ -37,9 +37,9 @@ public class Player extends Actor
         armor = 25;
         lightDmg = 25;
         heavyDmg = 75;
-        
-        setImage("SRight.png");
-        direction = 'l';
+    
+        direction = 'r';
+        setImage("RStand1.png");
         enable = true;
     }
     public void returnSpeed(){
@@ -59,15 +59,20 @@ public class Player extends Actor
                 enable = false; // set enable
                 menuWaitTime = 40; // set wait time
             }
+            checkKey();
+            setAni();
+            
             if (dashCD > 0) dashCD--;
             if (dashingTime > 0) {
-                dashingTime--;
-                //if (o
+                vSpeed = 0;
+                int accelaration = (direction == 'l') ? -10 : 10;
+                hSpeed = accelaration;
                 if (!checkLeftWall())
                     setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
+                else if (!checkLeftWall())
+                    setLocation(getX() + hSpeed, getY());
+                dashingTime--;
             }
-            setAni();
-            checkKey(); 
             interact();
             fall();
             attack();
@@ -96,8 +101,7 @@ public class Player extends Actor
         if (hSpeed > 0 && 
            (getOneObjectAtOffset(w / 2 + 2, h * -1/3, Collisions.class)) != null ||
             getOneObjectAtOffset(w / 2 + 1, 0, Collisions.class) != null ||
-            getOneObjectAtOffset(w / 2 + 2, h * 1/3, Collisions.class) != null || 
-            getOneObjectAtOffset(w / 2 + 1, h / -2, Collisions.class) != null) {
+            getOneObjectAtOffset(w / 2 + 2, h * 1/3, Collisions.class) != null) {
                 return true;        
         }
         return false;
@@ -109,8 +113,7 @@ public class Player extends Actor
         if (hSpeed < 0 && 
            (getOneObjectAtOffset(w / -2 - 2, h * -1/3, Collisions.class)) != null ||
             getOneObjectAtOffset(w / -2 - 1, 0, Collisions.class) != null ||
-            getOneObjectAtOffset(w / -2 - 2, h * 1/3, Collisions.class) != null ||
-            getOneObjectAtOffset(w / -2 - 1, h / -2, Floor.class) != null) {
+            getOneObjectAtOffset(w / -2 - 2, h * 1/3, Collisions.class) != null) {
                 return true;
         }
         return false;
@@ -156,66 +159,27 @@ public class Player extends Actor
     }
     
     public void checkKey() {
+        //dashing
+        if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
+            dashingTime = 20;
+            dashCD = 90;
+        }
         //horizontal move
         if (!Greenfoot.isKeyDown("left") && !Greenfoot.isKeyDown("right")) hSpeed = 0;
-        if (!checkLeftWall() && dashingTime == 0 && Greenfoot.isKeyDown("left")) {
+        if (dashingTime == 0 && !checkLeftWall() && Greenfoot.isKeyDown("left")) {
              hSpeed = -2;
              direction = 'l';
              hMove();
         }
-        if (!checkRightWall() && dashingTime == 0 && Greenfoot.isKeyDown("right")) {
+        if (dashingTime == 0 &&  !checkRightWall() && Greenfoot.isKeyDown("right")) {
             hSpeed = 2;
             direction = 'r';
-            setImage("RMove1.png");
             hMove();
         }
-        if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-            int accelaration = (direction == 'l') ? -10 : 10;
-            hSpeed = accelaration;
-            dashingTime = 15;
-            dashCD = 90;
-        }
-        
         //vertical move:
         int jumpHeight = -15;
-        if (checkGround()  && Greenfoot.isKeyDown("space")){
+        if (checkGround()  && Greenfoot.isKeyDown("space"))
             vSpeed = jumpHeight;
-            
-        }
-        
-        
-        //move vertically :
-        //int jumpHeight = -15;
-        //if (isOnGround()  && Greenfoot.isKeyDown("space") && !upPressed){
-        //    vSpeed = jumpHeight;
-        //    upPressed = true;
-        //}
-        //if (upPressed && !Greenfoot.isKeyDown("space")){
-        //    upPressed = false;
-        //}
-        
-        // move horizontally :
-        //if (dashingTime == 0) 
-        //    hSpeed = 2; // if not dashing, speed set to 2 (speed may change in future)
-        //if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-        //    int accelaration = 10;
-        //    if (direction == 'r') 
-        //        hSpeed = accelaration;
-        //    else
-        //        hSpeed = -accelaration;
-        //    dashingTime = 15; // give count down dashingTime + prevent spamming dash (no need boolean)
-        //    dashCD = 90; // set CD + prevent spamming dash (no need boolean)
-        //}
-        //if (dashingTime == 0 && Greenfoot.isKeyDown("left")){
-        //    setLocation(getX() - hSpeed, getY());
-        //    setImage("SLeft.png");
-        //    direction = 'l';
-        //}
-        //if (dashingTime == 0 && Greenfoot.isKeyDown("right")) {
-        //    setLocation(getX() + hSpeed, getY());
-        //    setImage("SRight.png");
-        //    direction = 'r';
-        //}
     }
     
     public void attack() {
@@ -229,19 +193,38 @@ public class Player extends Actor
     }
  
     /**
-     * 
-     * 
-     * @param image image's name + .extesion
+     * Set Image
      */
     public void setAni() {
-        getWorld().showText("" + delayAni, 600, 500);
-        curImg = getImage();
-        if (delayAni > 0) delayAni--;
-        if (direction == 'l') {
+        if (delayAni > 10) delayAni--; // animation delay time decrease
+        if (dashingTime == 0 && vSpeed > 2) setImage("fall.png");
+        if (direction == 'l') { // if direction = left 
+            //dash
+            if (dashingTime > 0) {
+                boolean equal_to_one = false;
+                for (int i = 1; i <= 4; i++) {
+                    if (ImageVisitor.equal(getImage(), new GreenfootImage("LDash" + i + ".png")))  {
+                        equal_to_one = true;
+                        break;
+                    }
+                }
+                if(!equal_to_one) {
+                    setImage("LDash1.png");
+                    delayAni = 0;
+                    curImg = 0;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LDash" + (curImg % 4 + 1) + ".png"))) {
+                    setImage("LDash" + ((curImg + 1) % 4 + 1) + ".png");
+                    delayAni = dashingTime / 4;
+                    curImg++;
+                    //getWorld().showText("" + curImg, 600, 500);
+                }
+            }
+            //standing
             if (checkGround() && hSpeed == 0) {
                 if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
                     setImage("LStand1.png");
-                    delayAni = 150;
+                    delayAni = 120;
                     }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
                     delayAni = 35;
@@ -250,7 +233,7 @@ public class Player extends Actor
             }
             
             // moving
-            if (checkGround() && hSpeed < 0) {
+            if (dashingTime == 0 &&checkGround() && Greenfoot.isKeyDown("left")) {
                 boolean equal_to_one = false;
                 for (int i = 1; i <= 8; i++) {
                     if (ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + i + ".png")))  {
@@ -261,41 +244,69 @@ public class Player extends Actor
                 if(!equal_to_one) {
                     setImage("LMove1.png");
                     delayAni = 0;
+                    curImg = 0;
                 }
-                
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove8.png"))) {
-                    setImage("LMove1.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove1.png"))) {
-                    setImage("LMove2.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove2.png"))) {
-                    setImage("LMove3.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove3.png"))) {
-                    setImage("LMove4.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove4.png"))) {
-                    setImage("LMove5.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove5.png"))) {
-                    setImage("LMove6.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove6.png"))) {
-                    setImage("LMove7.png");
-                    delayAni = 10;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove7.png"))) {
-                    setImage("LMove8.png");
-                    delayAni = 10;
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + (curImg % 8 + 1) + ".png"))) {
+                    setImage("LMove" + ((curImg + 1) % 8 + 1) + ".png");
+                    delayAni = 7;
+                    curImg++;
                 }
             }
+            if (vSpeed < 0) setImage("LJump.png");
+        }
+        if (direction == 'r') {
+            //dashing
+            if (dashingTime > 0) {
+                boolean equal_to_one = false;
+                for (int i = 1; i <= 4; i++) {
+                    if (ImageVisitor.equal(getImage(), new GreenfootImage("RDash" + i + ".png")))  {
+                        equal_to_one = true;
+                        break;
+                    }
+                }
+                if(!equal_to_one) {
+                    setImage("RDash1.png");
+                    delayAni = 0;
+                    curImg = 0;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RDash" + (curImg % 4 + 1) + ".png"))) {
+                    setImage("RDash" + ((curImg + 1) % 4 + 1) + ".png");
+                    delayAni = dashingTime / 4;
+                    curImg++;
+                }
+            } 
+            //standing
+            if (checkGround() && hSpeed == 0) {
+                if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
+                    setImage("RStand1.png");
+                    delayAni = 120;
+                    }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
+                    delayAni = 35;
+                    setImage("RStand2.png");
+                }
+            }
+            //moving
+            if (dashingTime == 0 && checkGround() && Greenfoot.isKeyDown("right")) {
+                boolean equal_to_one = false;
+                for (int i = 1; i <= 8; i++) {
+                    if (ImageVisitor.equal(getImage(), new GreenfootImage("RMove" + i + ".png")))  {
+                        equal_to_one = true;
+                        break;
+                    }
+                }
+                if(!equal_to_one) {
+                    setImage("RMove1.png");
+                    delayAni = 0;
+                    curImg = 0;
+                }
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RMove" + (curImg % 8 + 1) + ".png"))) {
+                    setImage("RMove" + ((curImg + 1) % 8 + 1) + ".png");
+                    delayAni = 7;
+                    curImg++;
+                }
+            }
+            if (vSpeed < 0) setImage("RJump.png");
         }
     }
     

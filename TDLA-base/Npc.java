@@ -25,7 +25,7 @@ public class Npc extends NPCS
     
     public void check(){
         if (!isSpoken && isTouching(Player.class)){
-            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight() * 4/5);
+            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight());
             if (Greenfoot.isKeyDown("e"))
                 createObjectText();
         }
