@@ -39,7 +39,7 @@ public class Npc extends NPCS
             TextBox textBox = new TextBox();
             getWorld().addObject(new TextBox(), getWorld().getWidth() / 2, this.getY() - 250);
             isSpoken = true;
-            Player.setEnable(false);
+            ((ImageScrollWorld) getWorld()).setEnable(true);
         //}
     }
     public void displayInteract(){

@@ -7,16 +7,21 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ImageScrollWorld extends World
 {
-    public static final int WIDTH = 900; // world width (viewport)
-    public static final int HEIGHT = 600; // world height (view port)
+    private int world_width;
+    private int world_height;
+    
     private int groundHeight;
     private Scroller scroller; // object that performs the scrolling
     Actor scrollActor; // an actor to stay in view
     GreenfootImage bg;
+    public boolean enable = true;
     
-    public ImageScrollWorld()
+    
+    public ImageScrollWorld(int width, int height, int cell)
     {    
-        super(WIDTH, HEIGHT, 1, false);  // creates an bounded world
+        super(width, height, cell, false);  // creates an bounded world
+        world_width = width;
+        world_height = height;
         //Scroller world stuff
         groundHeight = 43; //depends on image, groundheigh might be change
         
@@ -25,14 +30,14 @@ public class ImageScrollWorld extends World
         int bgHigh = bg.getHeight(); // scrolling image height
         scroller = new Scroller(this, bg, bgWide, bgHigh); // creates the Scroller object
         scrollActor = new Player(); // creates the actor to maintain view on
-        addObject(scrollActor, bgWide / 2, HEIGHT); //add actor to world (wherever)
+        addObject(scrollActor, bgWide / 2, height); //add actor to world (wherever)
         scroll(); // sets initial background image and puts main actor in view if needed
         prepare();
         
         //Other Stuffs:
         Floor ground = new Floor(bgWide, groundHeight);
         ground.getImage().setTransparency(0);
-        addObject(ground, WIDTH / 2, HEIGHT);
+        addObject(ground, width / 2, height);
         setPaintOrder(Player.class, HpBar.class, MeeleeEnemy.class, InteractIcon.class);
     }
     public void act() {
@@ -44,8 +49,8 @@ public class ImageScrollWorld extends World
     //attempts scrolling when actor is not in center of visible world
     private void scroll() {
         //determine scrolling offsets and scroll
-        int dsx = scrollActor.getX() - WIDTH / 2; // horizontal offset from center screen
-        int dsy = scrollActor.getY() - HEIGHT / 2; //vertical offset from center screen
+        int dsx = scrollActor.getX() - world_width / 2; // horizontal offset from center screen
+        int dsy = scrollActor.getY() - world_height / 2; //vertical offset from center screen
         scroller.scroll(dsx, dsy);
     }
     
@@ -71,5 +76,18 @@ public class ImageScrollWorld extends World
     
     public int getBgHeight() {
         return bg.getHeight();
+    }
+    
+    
+    public boolean checkEnable() {
+        return enable;
+    }
+    
+    /**
+     * true to enable
+     * false to disable
+     */
+    public void setEnable(boolean state) {
+        enable = state;
     }
 }

@@ -15,7 +15,6 @@ public class Player extends Actor
     private int dashingTime = 0; // positve = dashing state + disable horizontal movements
 
     private char direction;
-    private static boolean enable;
     private int menuWaitTime = 0; // time before can press esc again
     private static int delayAni = 0;
     private int curImg; // use if have more than 2 imgs for animation
@@ -40,7 +39,6 @@ public class Player extends Actor
     
         direction = 'r';
         setImage("RStand1.png");
-        enable = true;
     }
     public void returnSpeed(){
         
@@ -50,13 +48,13 @@ public class Player extends Actor
     {
         getWorld().showText("" + delayAni, 600, 500);
         if (delayAni > 0) delayAni--;
-        if (enable) {
+        if (((ImageScrollWorld) getWorld()).checkEnable())  {
             getWorld().setPaintOrder(Player.class);
             if (menuWaitTime > 0) 
                 menuWaitTime--; // only decrease when enable and time > 0
             if (menuWaitTime == 0 && Greenfoot.isKeyDown("escape")) {
                 getWorld().addObject(new EscMenu(), getWorld().getWidth() / 2, getWorld().getHeight() / 2);
-                enable = false; // set enable
+                ((ImageScrollWorld) getWorld()).setEnable(false); // disable movement
                 menuWaitTime = 40; // set wait time
             }
             checkKey();
@@ -66,11 +64,10 @@ public class Player extends Actor
             if (dashingTime > 0) {
                 vSpeed = 0;
                 int accelaration = (direction == 'l') ? -10 : 10;
-                hSpeed = accelaration;
-                if (!checkLeftWall())
-                    setLocation(getX() + hSpeed, getY()); // each time dashingTime - 1, move 10u (total distance move = hSpeed * dashingTime)
-                else if (!checkLeftWall())
-                    setLocation(getX() + hSpeed, getY());
+                if (direction == 'l' && checkLeftWall()) hSpeed = 0;
+                else if (direction == 'r' && checkRightWall()) hSpeed = 0;
+                else hSpeed = accelaration;
+                hMove();
                 dashingTime--;
             }
             interact();
@@ -99,9 +96,9 @@ public class Player extends Actor
         int h = getImage().getHeight();
         
         if (hSpeed > 0 && 
-           (getOneObjectAtOffset(w / 2 + 2, h * -1/3, Collisions.class)) != null ||
-            getOneObjectAtOffset(w / 2 + 1, 0, Collisions.class) != null ||
-            getOneObjectAtOffset(w / 2 + 2, h * 1/3, Collisions.class) != null) {
+           (getOneObjectAtOffset(w / 2 + 8, h * -1/3, Collisions.class)) != null ||
+            getOneObjectAtOffset(w / 2 + 8, 0, Collisions.class) != null ||
+            getOneObjectAtOffset(w / 2 + 8, h * 1/3, Collisions.class) != null) {
                 return true;        
         }
         return false;
@@ -111,9 +108,9 @@ public class Player extends Actor
         int h = getImage().getHeight();
         
         if (hSpeed < 0 && 
-           (getOneObjectAtOffset(w / -2 - 2, h * -1/3, Collisions.class)) != null ||
-            getOneObjectAtOffset(w / -2 - 1, 0, Collisions.class) != null ||
-            getOneObjectAtOffset(w / -2 - 2, h * 1/3, Collisions.class) != null) {
+           (getOneObjectAtOffset(w / -2 - 8, h * -1/3, Collisions.class)) != null ||
+            getOneObjectAtOffset(w / -2 - 8, 0, Collisions.class) != null ||
+            getOneObjectAtOffset(w / -2 - 8, h * 1/3, Collisions.class) != null) {
                 return true;
         }
         return false;
@@ -126,8 +123,8 @@ public class Player extends Actor
         int w = getImage().getWidth(); 
         int h = getImage().getHeight();
 
-        if ((getOneObjectAtOffset(w / -2 + 10, h / 2, Collisions.class) != null ||
-            getOneObjectAtOffset(w / 2 - 10, h / 2, Collisions.class) != null)) {
+        if ((getOneObjectAtOffset(w / -2 + 5, h / 2, Collisions.class) != null ||
+            getOneObjectAtOffset(w / 2 - 5, h / 2, Collisions.class) != null)) {
             return true;
         }
         return false;
@@ -161,18 +158,18 @@ public class Player extends Actor
     public void checkKey() {
         //dashing
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-            dashingTime = 20;
+            dashingTime = 15;
             dashCD = 90;
         }
         //horizontal move
         if (!Greenfoot.isKeyDown("left") && !Greenfoot.isKeyDown("right")) hSpeed = 0;
         if (dashingTime == 0 && !checkLeftWall() && Greenfoot.isKeyDown("left")) {
-             hSpeed = -2;
+             hSpeed = -3;
              direction = 'l';
              hMove();
         }
         if (dashingTime == 0 &&  !checkRightWall() && Greenfoot.isKeyDown("right")) {
-            hSpeed = 2;
+            hSpeed = 3;
             direction = 'r';
             hMove();
         }
@@ -196,7 +193,7 @@ public class Player extends Actor
      * Set Image
      */
     public void setAni() {
-        if (delayAni > 10) delayAni--; // animation delay time decrease
+        if (delayAni > 0) delayAni--; // animation delay time decrease
         if (dashingTime == 0 && vSpeed > 2) setImage("fall.png");
         if (direction == 'l') { // if direction = left 
             //dash
@@ -215,7 +212,7 @@ public class Player extends Actor
                 }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LDash" + (curImg % 4 + 1) + ".png"))) {
                     setImage("LDash" + ((curImg + 1) % 4 + 1) + ".png");
-                    delayAni = dashingTime / 4;
+                    delayAni = 30 / 4;
                     curImg++;
                     //getWorld().showText("" + curImg, 600, 500);
                 }
@@ -224,16 +221,16 @@ public class Player extends Actor
             if (checkGround() && hSpeed == 0) {
                 if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
                     setImage("LStand1.png");
-                    delayAni = 120;
+                    delayAni = 180;
                     }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
-                    delayAni = 35;
+                    delayAni = 50;
                     setImage("LStand2.png");
                 }
             }
             
             // moving
-            if (dashingTime == 0 &&checkGround() && Greenfoot.isKeyDown("left")) {
+            if (dashingTime == 0 && checkGround() && Greenfoot.isKeyDown("left")) {
                 boolean equal_to_one = false;
                 for (int i = 1; i <= 8; i++) {
                     if (ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + i + ".png")))  {
@@ -248,7 +245,7 @@ public class Player extends Actor
                 }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + (curImg % 8 + 1) + ".png"))) {
                     setImage("LMove" + ((curImg + 1) % 8 + 1) + ".png");
-                    delayAni = 7;
+                    delayAni = 10;
                     curImg++;
                 }
             }
@@ -271,7 +268,7 @@ public class Player extends Actor
                 }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RDash" + (curImg % 4 + 1) + ".png"))) {
                     setImage("RDash" + ((curImg + 1) % 4 + 1) + ".png");
-                    delayAni = dashingTime / 4;
+                    delayAni = 15 / 4;
                     curImg++;
                 }
             } 
@@ -279,10 +276,10 @@ public class Player extends Actor
             if (checkGround() && hSpeed == 0) {
                 if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
                     setImage("RStand1.png");
-                    delayAni = 120;
+                    delayAni = 180;
                     }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
-                    delayAni = 35;
+                    delayAni = 50;
                     setImage("RStand2.png");
                 }
             }
@@ -302,7 +299,7 @@ public class Player extends Actor
                 }
                 if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RMove" + (curImg % 8 + 1) + ".png"))) {
                     setImage("RMove" + ((curImg + 1) % 8 + 1) + ".png");
-                    delayAni = 7;
+                    delayAni = 10;
                     curImg++;
                 }
             }
@@ -310,49 +307,26 @@ public class Player extends Actor
         }
     }
     
-    /**
-     * enable setter
-     */
-    public static void setEnable(boolean state) {
-        enable = state;
-    }
     public static boolean viewMoreThanOne(){
         return moreThanOne;
     }
-    
-    //Getter && Setter stats
-    public int getMaxHp() {
-        return (int) maxHp;
-    }
-    public int getHp() {
-        return (int) hp;
-    }
-    
-    public double getArmor() {
-        return armor;
-    }
-    
-    public double getLightDmg() {
-        return lightDmg;
-    }
-    
-    public double getHeavyDmg() {
-        return heavyDmg;
-    }
-    
-    public void setHp(double newHp) {
-        hp = newHp;
-    }
-    
+
     public void setArmor(double newArmor) {
         armor = newArmor;
     }
-    
     public void setLightDmg(double newDmg) {
         lightDmg = newDmg;
     }
     
     public void setHeavyDmg(double newDmg) {
         heavyDmg = newDmg;
+    }
+    
+    public double getMaxHp() {
+        return maxHp;
+    }
+    
+    public double getHp() {
+        return hp;
     }
 }

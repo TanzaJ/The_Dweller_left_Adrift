@@ -38,8 +38,8 @@ public class TextBox extends Objects
     public void text(){
         getWorld().showText(texts[i], this.getX() + 5, this.getY() - 5 );
         if (i == texts.length - 1){
+            ((ImageScrollWorld) getWorld()).setEnable(true);
             getWorld().removeObject(this);
-            Player.setEnable(true);
         }
     }
     

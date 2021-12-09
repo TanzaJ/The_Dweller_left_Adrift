@@ -42,8 +42,8 @@ public class HpBar extends Player
     {
         referenceText = refText;
         unitOfMeasure = unitType;
-        maximumValue = getMaxHp();
-        add(getHp());
+        maximumValue = (int) getMaxHp();
+        add((int) getHp());
     }
     
     public void act() {

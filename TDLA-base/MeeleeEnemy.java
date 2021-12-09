@@ -54,9 +54,7 @@ public class MeeleeEnemy extends Actor
     }
     
     private void attack() {
-        Player player = (Player) getWorld().getObjects(Player.class).get(0);
-        int pHp = player.getHp();
-        pHp -= dmg * (1 - armor / 100);
+        
     }
     
     private void setAnimation() {

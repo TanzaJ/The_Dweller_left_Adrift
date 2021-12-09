@@ -26,7 +26,7 @@ public class MainScreenMenu extends Menus
             case "Play": 
                 if(Greenfoot.mouseClicked(this))
                 {
-                    Greenfoot.setWorld(new ImageScrollWorld());
+                    Greenfoot.setWorld(new ImageScrollWorld(900, 600, 1));
                     this.setImage("PlayMenuButton.png");
                 }
                 break;
