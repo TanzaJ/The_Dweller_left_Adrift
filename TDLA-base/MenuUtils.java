@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Menus extends Actor
+public class MenuUtils extends Actor
 {
     /**
      * Act - do whatever the Menus wants to do. This method is called whenever

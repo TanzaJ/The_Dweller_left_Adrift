@@ -13,6 +13,7 @@ public class Floor extends Collisions
     }
     public Floor() {
         this(100, 50);
+        //getImage().setTransparency(0);
     }
     public void act()
     {

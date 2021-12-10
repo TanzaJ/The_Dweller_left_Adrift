@@ -7,7 +7,7 @@ import java.util.List;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class MenuArrowButton extends Menus
+public class MenuArrowButton extends MenuUtils
 {   
     private int menuWaitTime = 40; //before can press esc again
     String name;
@@ -22,6 +22,9 @@ public class MenuArrowButton extends Menus
      */
     public void act()
     {   
+        if(Greenfoot.mousePressed(this)) {
+            
+        }
         // gonna allow to the button to see where it has been activated
         if(Greenfoot.mouseClicked(this)) {
             switch (name) {
@@ -29,7 +32,7 @@ public class MenuArrowButton extends Menus
                     Greenfoot.setWorld(new MainOptions());
                     break;
                 case "MainScreen":
-                    Greenfoot.setWorld(new MainScreen());
+                    Greenfoot.setWorld(new StartScreen());
                     break;
                 //case "EscMenu1":
                     //getWorld().removeObject(this);    
