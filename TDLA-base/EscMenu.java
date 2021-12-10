@@ -6,10 +6,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class EscMenu extends Menu
+public class EscMenu extends Menus
 {
     private int menuWaitTime = 40; //before can press esc again
-    MenuArrowButton arrow = new MenuArrowButton("EscMenu1");
+    MenuArrow arrow = new MenuArrow("EscMenu1");
     public EscMenu() {
         getImage().scale(800, 500);
     }

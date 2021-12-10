@@ -14,6 +14,8 @@ public class MainScreenButton extends MenuUtils
     private boolean flashed;
     private boolean mouseOver;
     
+    private MenuBackground menu = new MenuBackground();
+    
     public MainScreenButton(String name, int width, int height) 
     {
         this.name = name;
@@ -57,15 +59,19 @@ public class MainScreenButton extends MenuUtils
                 case "play": 
                         ((StartScreen) getWorld()).stopMusic();
                         Greenfoot.setWorld(new ImageScrollWorld(900, 600, 1));
-                        this.setImage("PlayMenuButton.png");
+                        //this.setImage("PlayMenuButton.png");
                     break;
                 case "options": 
-                        Greenfoot.setWorld(new MainOptions());
-                        this.setImage("OptionsMenuButton.png");
+                        getWorld().addObject(menu, getWorld().getWidth() / 2, getWorld().getHeight() / 2);
+                        getWorld().addObject(new ControlsHelpButton(), getWorld().getWidth() / 2, getWorld().getHeight() / 2);
+                        getWorld().addObject(new MenuArrow("closeOptions"), 50, getWorld().getHeight() - 50);
+                        //getWorld().addObject(new MenuArrow("closeOptions"), 50, getWorld().getWidth() - 50);
+                        
+                        //this.setImage("OptionsMenuButton.png");
                     break;
                 case "credits": 
                         Greenfoot.setWorld(new MainCredits());
-                        this.setImage("CreditsMenuButton.png");
+                        //this.setImage("CreditsMenuButton.png");
                     break;
             }
     }

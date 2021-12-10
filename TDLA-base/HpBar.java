@@ -47,13 +47,13 @@ public class HpBar extends Player
     }
     
     public void act() {
-        Actor player = (Actor)getWorld().getObjects(Player.class).get(0);
-        setLocation(player.getX(), player.getY() - player.getImage().getHeight() * 3/4);
         
         //if (player == null) getWorld().removeObject(this);
         
         newImage();
         checkValue();
+        Actor player = (Actor)getWorld().getObjects(Player.class).get(0);
+        setLocation(player.getX(), player.getY() - player.getImage().getHeight() * 3/4);
     }
     
     /**
