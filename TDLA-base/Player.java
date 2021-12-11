@@ -56,6 +56,7 @@ public class Player extends Actor
                 getWorld().addObject(new EscMenu(), getWorld().getWidth() / 2, getWorld().getHeight() / 2);
                 ((ImageScrollWorld) getWorld()).setEnable(false); // disable movement
                 menuWaitTime = 40; // set wait time
+                Greenfoot.playSound("menuInteract.wav"); // activate the menu sound
             }
             checkKey();
             setAni();
@@ -151,7 +152,10 @@ public class Player extends Actor
              vSpeed = 0;
              while (checkGround()) setLocation(getX(), getY() - 1);
              setLocation(getX(), getY() + 1);
-        } else if (checkBumped()) vSpeed = 0;
+        } else if (checkBumped()) {
+            vSpeed = 0;
+            // Greenfoot.playSound("collision.wav"); // bumped/collision sound
+        }
         else vSpeed++;
     }
     
@@ -167,16 +171,20 @@ public class Player extends Actor
              hSpeed = -3;
              direction = 'l';
              hMove();
+             // Greenfoot.playSound("walking.wav"); // walking sound
         }
         if (dashingTime == 0 &&  !checkRightWall() && Greenfoot.isKeyDown("right")) {
             hSpeed = 3;
             direction = 'r';
             hMove();
+            // Greenfoot.playSound("walking.wav"); // walking sound
         }
         //vertical move:
         int jumpHeight = -15;
-        if (checkGround()  && Greenfoot.isKeyDown("space"))
+        if (checkGround()  && Greenfoot.isKeyDown("space")) {
             vSpeed = jumpHeight;
+            Greenfoot.playSound("jump.wav"); // jumping sound
+        }
     }
     
     public void attack() {
