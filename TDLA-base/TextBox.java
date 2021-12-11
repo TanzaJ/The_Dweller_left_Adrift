@@ -14,7 +14,6 @@ public class TextBox extends Objects
     private boolean exists = false;
     
     public TextBox(){
-        
     }
     /**
      * Act - do whatever the text wants to do. This method is called whenever
@@ -22,6 +21,7 @@ public class TextBox extends Objects
      */
     public void act()
     {
+        getImage().scale(getWorld().getWidth(), 150);
         textbox();
         text();
     }
@@ -38,8 +38,8 @@ public class TextBox extends Objects
     public void text(){
         getWorld().showText(texts[i], this.getX() + 5, this.getY() - 5 );
         if (i == texts.length - 1){
+            ((ImageScrollWorld) getWorld()).setEnable(true);
             getWorld().removeObject(this);
-            Player.setEnable(true);
         }
     }
     

@@ -1,8 +1,8 @@
 #BlueJ class context
 comment0.target=ImageScrollWorld
 comment0.text=\r\n\ creates\ a\ limited\ (to\ scrolling\ background\ image\ size)\ center\ screen\ actor\ followin\ scrollin\ world\r\n\ \r\n\ @author\ danpost\r\n
-comment1.params=
-comment1.target=ImageScrollWorld()
+comment1.params=width\ height\ cell
+comment1.target=ImageScrollWorld(int,\ int,\ int)
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
@@ -16,4 +16,9 @@ comment6.params=
 comment6.target=int\ getBgWidth()
 comment7.params=
 comment7.target=int\ getBgHeight()
-numComments=8
+comment8.params=
+comment8.target=boolean\ checkEnable()
+comment9.params=state
+comment9.target=void\ setEnable(boolean)
+comment9.text=\r\n\ true\ to\ enable\r\n\ false\ to\ disable\r\n
+numComments=10

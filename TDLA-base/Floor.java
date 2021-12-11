@@ -12,7 +12,8 @@ public class Floor extends Collisions
         getImage().scale(width, height);
     }
     public Floor() {
-        this(100, 200);
+        this(100, 50);
+        //getImage().setTransparency(0);
     }
     public void act()
     {

@@ -42,14 +42,18 @@ public class HpBar extends Player
     {
         referenceText = refText;
         unitOfMeasure = unitType;
-        maximumValue = getMaxHp();
-        add(getHp());
+        maximumValue = (int) getMaxHp();
+        add((int) getHp());
     }
     
     public void act() {
+        
+        //if (player == null) getWorld().removeObject(this);
+        
+        newImage();
+        checkValue();
         Actor player = (Actor)getWorld().getObjects(Player.class).get(0);
         setLocation(player.getX(), player.getY() - player.getImage().getHeight() * 3/4);
-        if (player == null) getWorld().removeObject(this);
     }
     
     /**

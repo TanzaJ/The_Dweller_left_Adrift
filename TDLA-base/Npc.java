@@ -25,7 +25,7 @@ public class Npc extends NPCS
     
     public void check(){
         if (!isSpoken && isTouching(Player.class)){
-            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight() * 4/5);
+            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight());
             if (Greenfoot.isKeyDown("e"))
                 createObjectText();
         }
@@ -37,9 +37,9 @@ public class Npc extends NPCS
     public void createObjectText(){
         //if (isTouching(Player.class) && Greenfoot.isKeyDown("e") && !isSpoken){
             TextBox textBox = new TextBox();
-            getWorld().addObject(new TextBox(), this.getX(), this.getY() - 250);
+            getWorld().addObject(new TextBox(), getWorld().getWidth() / 2, this.getY() - 250);
             isSpoken = true;
-            Player.setEnable(false);
+            ((ImageScrollWorld) getWorld()).setEnable(true);
         //}
     }
     public void displayInteract(){

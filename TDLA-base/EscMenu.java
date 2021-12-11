@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class EscMenu extends Menus
 {
     private int menuWaitTime = 40; //before can press esc again
-    MenuArrowButton arrow = new MenuArrowButton("EscMenu1");
+    MenuArrow arrow = new MenuArrow("EscMenu1");
     public EscMenu() {
         getImage().scale(800, 500);
     }
@@ -25,9 +25,8 @@ public class EscMenu extends Menus
             menuWaitTime--;
         if (menuWaitTime == 0 && (Greenfoot.isKeyDown("escape") || Greenfoot.mouseClicked(arrow))) {
             getWorld().removeObject(arrow);
-            Player.setEnable(true);
+            ((ImageScrollWorld) getWorld()).setEnable(true);
             getWorld().removeObject(this);
-            
         }
     }
     
