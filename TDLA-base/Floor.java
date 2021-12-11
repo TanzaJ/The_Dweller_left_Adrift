@@ -17,6 +17,5 @@ public class Floor extends Collisions
     }
     public void act()
     {
-        
     }
 }
