@@ -22,7 +22,7 @@ public class Npc extends NPCS
         displayInteract();
         //createObjectText();
     }
-    
+
     public void check(){
         if (!isSpoken && isTouching(Player.class)){
             getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight());

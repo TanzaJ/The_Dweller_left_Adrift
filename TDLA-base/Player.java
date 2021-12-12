@@ -164,8 +164,6 @@ public class Player extends Actor
     }
     
     public void checkKey() {
-        //attack
-        attack();
         
         //dashing
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
@@ -190,7 +188,7 @@ public class Player extends Actor
         int jumpHeight = -15;
         if (checkGround()  && Greenfoot.isKeyDown("space")) {
             vSpeed = jumpHeight;
-            Greenfoot.playSound("jump.wav"); // jumping sound
+            Greenfoot.playSound("jump.mp3"); // jumping sound
         }
     }
  
@@ -209,7 +207,7 @@ public class Player extends Actor
                 ;
             }
             if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
-                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 8);
+                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 100);
                 attackTime = 15;
                 heavyAttackCD = 200;
             }
@@ -276,7 +274,7 @@ public class Player extends Actor
             }
             //heavy attack
             if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
-                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 10);
+                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 55);
                 attackTime = 15;
                 heavyAttackCD = 200;
             }
@@ -337,15 +335,7 @@ public class Player extends Actor
     }
     
     public void attack() {
-            if (attackTime == 0 && Greenfoot.isKeyDown("d")) {
-                
-            if (Greenfoot.isKeyDown("s")) {
-                
-            }
-            if (Greenfoot.isKeyDown("s") && Greenfoot.isKeyDown("up")) {
-                //if (ImageVisitor.equal(getImage(), new GreenfootImage("+ ".png")))
-            }
-        }
+            
     }
     
     public void beHitEffect() {
