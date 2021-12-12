@@ -18,6 +18,9 @@ public class Player extends Actor
     private int menuWaitTime = 0; // time before can press esc again
     private static int delayAni = 0;
     private int curImg; // use if have more than 2 imgs for animation
+    private int beHitTime;
+    private int attackTime;
+    private int heavyAttackCD = 0;
     
     // Textbox 
     private static boolean moreThanOne;
@@ -46,8 +49,8 @@ public class Player extends Actor
     }
     public void act()
     {
-        getWorld().showText("" + delayAni, 600, 500);
         if (delayAni > 0) delayAni--;
+        
         if (((ImageScrollWorld) getWorld()).checkEnable())  {
             getWorld().setPaintOrder(Player.class);
             if (menuWaitTime > 0) 
@@ -60,6 +63,7 @@ public class Player extends Actor
             }
             checkKey();
             setAni();
+            beHitEffect();
             
             if (dashCD > 0) dashCD--;
             if (dashingTime > 0) {
@@ -160,6 +164,7 @@ public class Player extends Actor
     }
     
     public void checkKey() {
+        
         //dashing
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
             dashingTime = 15;
@@ -183,17 +188,7 @@ public class Player extends Actor
         int jumpHeight = -15;
         if (checkGround()  && Greenfoot.isKeyDown("space")) {
             vSpeed = jumpHeight;
-            Greenfoot.playSound("jump.wav"); // jumping sound
-        }
-    }
-    
-    public void attack() {
-        if (Greenfoot.isKeyDown("d")); // light attack goes here
-        if (Greenfoot.isKeyDown("s")) {
-            //heavy attack goes here
-        }
-        if (Greenfoot.isKeyDown("s") && Greenfoot.isKeyDown("up")) {
-            // upper slash goes here
+            Greenfoot.playSound("jump.mp3"); // jumping sound
         }
     }
  
@@ -202,8 +197,20 @@ public class Player extends Actor
      */
     public void setAni() {
         if (delayAni > 0) delayAni--; // animation delay time decrease
+        if (heavyAttackCD > 0) heavyAttackCD--;
+        if (attackTime > 0) attackTime--;
+        
         if (dashingTime == 0 && vSpeed > 2) setImage("fall.png");
         if (direction == 'l') { // if direction = left 
+            //attack
+            if (attackTime == 0 && Greenfoot.isKeyDown("s")) {
+                ;
+            }
+            if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
+                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 100);
+                attackTime = 15;
+                heavyAttackCD = 200;
+            }
             //dash
             if (dashingTime > 0) {
                 boolean equal_to_one = false;
@@ -260,6 +267,18 @@ public class Player extends Actor
             if (vSpeed < 0) setImage("LJump.png");
         }
         if (direction == 'r') {
+            //attack:
+            //light attack
+            if (attackTime == 0 && Greenfoot.isKeyDown("s")) {
+                ;
+            }
+            //heavy attack
+            if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
+                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 55);
+                attackTime = 15;
+                heavyAttackCD = 200;
+            }
+            
             //dashing
             if (dashingTime > 0) {
                 boolean equal_to_one = false;
@@ -313,6 +332,27 @@ public class Player extends Actor
             }
             if (vSpeed < 0) setImage("RJump.png");
         }
+    }
+    
+    public void attack() {
+            
+    }
+    
+    public void beHitEffect() {
+        int knockBackX = (direction == 'l') ? -3 : 3;
+        int knockBackY = (direction == 'l') ? -2 : 2;
+        while (beHitTime > 0) {
+            setLocation(getX() + knockBackX, getY() + knockBackY);
+            beHitTime--;
+        }
+    }
+    
+    /**
+     * when enemy hit, call this method to do dmg
+     */
+    public void getHit(int dmg) {
+        this.hp -= dmg * (1 - armor / 100);
+        beHitTime = 10;
     }
     
     public static boolean viewMoreThanOne(){

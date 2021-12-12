@@ -8,6 +8,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Floor extends Collisions
 {
+    public Floor(int width, int height, int rotation) {
+        getImage().scale(width, height);
+        setRotation(rotation);
+    }
+    
     public Floor(int width, int height) {
         getImage().scale(width, height);
     }
@@ -17,6 +22,5 @@ public class Floor extends Collisions
     }
     public void act()
     {
-        
     }
 }

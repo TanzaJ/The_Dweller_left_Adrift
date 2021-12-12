@@ -17,28 +17,26 @@ public class ImageScrollWorld extends World
     public boolean enable = true;
     
     
-    public ImageScrollWorld(int width, int height, int cell)
+    public ImageScrollWorld()
     {    
-        super(width, height, cell, false);  // creates an bounded world
-        world_width = width;
-        world_height = height;
+        super(900, 600, 1, false);  // creates an bounded world
+        world_width = 900;
+        world_height = 600;
         //Scroller world stuff
-        groundHeight = 43; //depends on image, groundheigh might be change
         
         bg = new GreenfootImage("bg.png"); // creates the image to scroll
         int bgWide = bg.getWidth(); // scrolling image width
         int bgHigh = bg.getHeight(); // scrolling image height
         scroller = new Scroller(this, bg, bgWide, bgHigh); // creates the Scroller object
         scrollActor = new Player(); // creates the actor to maintain view on
-        addObject(scrollActor, bgWide / 2, height); //add actor to world (wherever)
+        addObject(scrollActor, bgWide / 2, world_height); //add actor to world (wherever)
         scroll(); // sets initial background image and puts main actor in view if needed
+        Floor ground = new Floor(bgWide, 50);
+        addObject(ground, world_width / 2, world_height);
         prepare();
         
         //Other Stuffs:
-        Floor ground = new Floor(bgWide, groundHeight);
-        ground.getImage().setTransparency(0);
-        addObject(ground, width / 2, height);
-        setPaintOrder(Player.class, HpBar.class, MeeleeEnemy.class, InteractIcon.class);
+        setPaintOrder(Player.class, HpBar.class, Enemies.class, InteractIcon.class);
     }
     public void act() {
         if (scrollActor != null) scroll();
@@ -60,10 +58,6 @@ public class ImageScrollWorld extends World
      */
     private void prepare()
     {
-        addObject(new Npc(),566,550);
-        addObject(new Floor(),150,480);
-        HpBar hpBar = new HpBar("", "");
-        addObject(hpBar, scrollActor.getX(), scrollActor.getY() - scrollActor.getImage().getHeight() * 3/4);
     }
     
     public int getGroundHeight() {

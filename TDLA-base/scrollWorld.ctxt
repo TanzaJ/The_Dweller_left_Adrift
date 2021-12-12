@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.target=scrollWorld
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ scrollWorld\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=width\ height\ cell\ background\ groundHeight
+comment1.target=scrollWorld(int,\ int,\ int,\ java.lang.String,\ int)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ scroll()
+comment4.params=
+comment4.target=boolean\ checkEnable()
+comment5.params=state
+comment5.target=void\ setEnable(boolean)
+numComments=6
