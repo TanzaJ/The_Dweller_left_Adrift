@@ -58,7 +58,7 @@ public class MainScreenButton extends MenuUtils
             {
                 case "play": 
                         ((StartScreen) getWorld()).stopMusic();
-                        Greenfoot.setWorld(new Lv1());
+                        Greenfoot.setWorld(new ImageScrollWorld());
                         //this.setImage("PlayMenuButton.png");
                     break;
                 case "options": 

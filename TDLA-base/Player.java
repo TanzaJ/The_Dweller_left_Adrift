@@ -22,6 +22,9 @@ public class Player extends Actor
     private int attackTime;
     private int heavyAttackCD = 0;
     
+    //Jump check
+    private boolean isJump = false;
+    
     // Textbox 
     private static boolean moreThanOne;
     
@@ -188,13 +191,13 @@ public class Player extends Actor
         }
         //vertical move:
         int jumpHeight = -15;
-        if (checkGround()  && Greenfoot.isKeyDown("space")) {
+        if (checkGround()  && Greenfoot.isKeyDown("space") && !isJump) {
             vSpeed = jumpHeight;
             Greenfoot.playSound("jump.mp3"); // jumping sound
+            isJump = true;
         }
-        
-        if (checkGround() && Greenfoot.isKeyDown("e")) {
-            ;
+        if (!Greenfoot.isKeyDown("space") && isJump) {
+            isJump = false;
         }
     }
  
@@ -350,6 +353,7 @@ public class Player extends Actor
             beHitTime--;
         }
     }
+
     
     /**
      * when enemy hit, call this method to do dmg
@@ -381,4 +385,5 @@ public class Player extends Actor
     public double getHp() {
         return hp;
     }
+    
 }

@@ -13,8 +13,13 @@ public class ImageScrollWorld extends World
     private int groundHeight;
     private Scroller scroller; // object that performs the scrolling
     Actor scrollActor; // an actor to stay in view
+    Actor npc;
+    Actor floor;
+    Actor spikes;
     GreenfootImage bg;
     public boolean enable = true;
+    
+    private boolean isTouchingSpikes = false;
     
     
     public ImageScrollWorld()
@@ -29,12 +34,23 @@ public class ImageScrollWorld extends World
         int bgHigh = bg.getHeight(); // scrolling image height
         scroller = new Scroller(this, bg, bgWide, bgHigh); // creates the Scroller object
         scrollActor = new Player(); // creates the actor to maintain view on
-        addObject(scrollActor, bgWide / 2, world_height); //add actor to world (wherever)
+        addObject(scrollActor, 26, 548); //add actor to world (wherever)
         scroll(); // sets initial background image and puts main actor in view if needed
         Floor ground = new Floor(bgWide, 50);
         addObject(ground, world_width / 2, world_height);
         prepare();
         
+        // Add all Objects into the level
+        npc = new Npc();
+        floor = new Floor();
+        spikes = new Spikes();
+        addObject(npc, 100, 548);
+        for (int i = 1; i < 16; i++){
+            addObject(new Spikes(), 400 + i * 72, 548);
+        }
+        addObject(new Floor(), 309, 509);
+        addObject(new Floor(), 480, 420);
+        addObject(new Floor(), 771, 408);
         //Other Stuffs:
         setPaintOrder(Player.class, HpBar.class, Enemies.class, InteractIcon.class);
     }

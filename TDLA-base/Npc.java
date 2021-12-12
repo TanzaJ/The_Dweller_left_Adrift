@@ -19,15 +19,16 @@ public class Npc extends NPCS
     }
     public void act(){
         check();
-        displayInteract();
         //createObjectText();
     }
 
     public void check(){
         if (!isSpoken && isTouching(Player.class)){
-            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight());
-            if (Greenfoot.isKeyDown("e"))
+            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight() - 80);
+            if (Greenfoot.isKeyDown("e")){
                 createObjectText();
+                ((ImageScrollWorld) getWorld()).setEnable(false);
+            }
         }
         if (!isTouching(Player.class) || isSpoken){
             getWorld().removeObject(interactIcon);
@@ -41,8 +42,5 @@ public class Npc extends NPCS
             isSpoken = true;
             ((ImageScrollWorld) getWorld()).setEnable(true);
         //}
-    }
-    public void displayInteract(){
-        
     }
 }
