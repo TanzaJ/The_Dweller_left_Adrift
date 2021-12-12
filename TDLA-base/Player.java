@@ -32,6 +32,8 @@ public class Player extends Actor
     private double lightDmg; // create lightDmg variable
     private double heavyDmg; // create heavyDmg variable
     
+    private String bag;
+    
     
     public Player() {
         //initialize stats:
@@ -173,13 +175,13 @@ public class Player extends Actor
         //horizontal move
         if (!Greenfoot.isKeyDown("left") && !Greenfoot.isKeyDown("right")) hSpeed = 0;
         if (dashingTime == 0 && !checkLeftWall() && Greenfoot.isKeyDown("left")) {
-             hSpeed = -3;
+             hSpeed = -2;
              direction = 'l';
              hMove();
              // Greenfoot.playSound("walking.wav"); // walking sound
         }
         if (dashingTime == 0 &&  !checkRightWall() && Greenfoot.isKeyDown("right")) {
-            hSpeed = 3;
+            hSpeed = 2;
             direction = 'r';
             hMove();
             // Greenfoot.playSound("walking.wav"); // walking sound
@@ -190,6 +192,10 @@ public class Player extends Actor
             vSpeed = jumpHeight;
             Greenfoot.playSound("jump.mp3"); // jumping sound
         }
+        
+        if (checkGround() && Greenfoot.isKeyDown("e")) {
+            ;
+        }
     }
  
     /**
@@ -198,21 +204,17 @@ public class Player extends Actor
     public void setAni() {
         if (delayAni > 0) delayAni--; // animation delay time decrease
         if (heavyAttackCD > 0) heavyAttackCD--;
-        if (attackTime > 0) attackTime--;
+        if (attackTime > 0) {
+            vSpeed = 0;
+            attackTime--;
+            
+        }
+        getWorld().showText("" + attackTime, 300, 500);
         
         if (dashingTime == 0 && vSpeed > 2) setImage("fall.png");
         if (direction == 'l') { // if direction = left 
-            //attack
-            if (attackTime == 0 && Greenfoot.isKeyDown("s")) {
-                ;
-            }
-            if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
-                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 100);
-                attackTime = 15;
-                heavyAttackCD = 200;
-            }
             //dash
-            if (dashingTime > 0) {
+            if (attackTime == 0 && dashingTime > 0) {
                 boolean equal_to_one = false;
                 for (int i = 1; i <= 4; i++) {
                     if (ImageVisitor.equal(getImage(), new GreenfootImage("LDash" + i + ".png")))  {
@@ -233,7 +235,7 @@ public class Player extends Actor
                 }
             }
             //standing
-            if (checkGround() && hSpeed == 0) {
+            if (attackTime == 0 && checkGround() && hSpeed == 0) {
                 if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
                     setImage("LStand1.png");
                     delayAni = 180;
@@ -247,7 +249,7 @@ public class Player extends Actor
             // moving
             if (dashingTime == 0 && checkGround() && Greenfoot.isKeyDown("left")) {
                 boolean equal_to_one = false;
-                for (int i = 1; i <= 8; i++) {
+                for (int i = 1; i <= 6; i++) {
                     if (ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + i + ".png")))  {
                         equal_to_one = true;
                         break;
@@ -258,9 +260,9 @@ public class Player extends Actor
                     delayAni = 0;
                     curImg = 0;
                 }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + (curImg % 8 + 1) + ".png"))) {
-                    setImage("LMove" + ((curImg + 1) % 8 + 1) + ".png");
-                    delayAni = 10;
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LMove" + (curImg % 6 + 1) + ".png"))) {
+                    setImage("LMove" + ((curImg + 1) % 6 + 1) + ".png");
+                    delayAni = 13;
                     curImg++;
                 }
             }
@@ -275,7 +277,7 @@ public class Player extends Actor
             //heavy attack
             if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
                 getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 55);
-                attackTime = 15;
+                attackTime = 14;
                 heavyAttackCD = 200;
             }
             
@@ -298,7 +300,7 @@ public class Player extends Actor
                     delayAni = 15 / 4;
                     curImg++;
                 }
-            } 
+            }
             //standing
             if (checkGround() && hSpeed == 0) {
                 if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
@@ -313,7 +315,7 @@ public class Player extends Actor
             //moving
             if (dashingTime == 0 && checkGround() && Greenfoot.isKeyDown("right")) {
                 boolean equal_to_one = false;
-                for (int i = 1; i <= 8; i++) {
+                for (int i = 1; i <= 6; i++) {
                     if (ImageVisitor.equal(getImage(), new GreenfootImage("RMove" + i + ".png")))  {
                         equal_to_one = true;
                         break;
@@ -324,9 +326,9 @@ public class Player extends Actor
                     delayAni = 0;
                     curImg = 0;
                 }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RMove" + (curImg % 8 + 1) + ".png"))) {
-                    setImage("RMove" + ((curImg + 1) % 8 + 1) + ".png");
-                    delayAni = 10;
+                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RMove" + (curImg % 6 + 1) + ".png"))) {
+                    setImage("RMove" + ((curImg + 1) % 6 + 1) + ".png");
+                    delayAni = 13;
                     curImg++;
                 }
             }
@@ -335,7 +337,9 @@ public class Player extends Actor
     }
     
     public void attack() {
-            
+            if (attackTime == 0 && Greenfoot.isKeyDown("s")) {
+                attackTime = 25;
+            }
     }
     
     public void beHitEffect() {

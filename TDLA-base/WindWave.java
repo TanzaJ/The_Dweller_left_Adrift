@@ -11,7 +11,7 @@ public class WindWave extends Actor
 {
     private int hSpeed;
     private int existTime;
-    private List<Enemies> hitting = getIntersectingObjects(Enemies.class);
+    //private List<Enemies> hitting = getIntersectingObjects(Enemies.class);
     
     public WindWave(char direction) {
         hSpeed = (direction == 'l') ? -7 : 7;
@@ -31,9 +31,9 @@ public class WindWave extends Actor
     }
     
     public void attack() {
-        if (hitting != null) {
-            for (Enemies enemyGotHit : hitting)
-                ;
-        }
+        //if (hitting != null) {
+        //    for (Enemies enemyGotHit : hitting)
+        //       ;
+        //}
     }
 }
