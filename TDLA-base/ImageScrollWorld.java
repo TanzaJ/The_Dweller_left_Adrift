@@ -43,17 +43,14 @@ public class ImageScrollWorld extends World
         // Add all Objects into the level
         npc = new Npc();
         floor = new Floor();
-        spikes = new Spikes();
+        //spikes = new Spikes();
         addObject(npc, 100, 548);
-        for (int i = 1; i < 16; i++){
-            addObject(new Spikes(), 400 + i * 72, 548);
         }
-        addObject(new Floor(), 309, 509);
-        addObject(new Floor(), 480, 420);
-        addObject(new Floor(), 771, 408);
+        //addObject(new Floor(), 309, 509);
+        //(new Floor(), 480, 420);
+        //(new Floor(), 771, 408);
         //Other Stuffs:
-        setPaintOrder(Player.class, HpBar.class, Enemies.class, InteractIcon.class);
-    }
+        //setPaintOrder(Player.class, InteractIcon.class);
     public void act() {
         if (scrollActor != null) scroll();
         if (EscMenu.class != null)

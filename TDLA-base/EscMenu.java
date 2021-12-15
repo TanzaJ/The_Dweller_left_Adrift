@@ -25,7 +25,7 @@ public class EscMenu extends Menus
             menuWaitTime--;
         if (menuWaitTime == 0 && (Greenfoot.isKeyDown("escape") || Greenfoot.mouseClicked(arrow))) {
             getWorld().removeObject(arrow);
-            ((ImageScrollWorld) getWorld()).setEnable(true);
+            ((scrollWorld) getWorld()).setEnable(true);
             getWorld().removeObject(this);
         }
     }

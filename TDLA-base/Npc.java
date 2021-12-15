@@ -10,7 +10,7 @@ public class Npc extends NPCS
 
 {
      // To check if player is near Npc
-    private InteractIcon interactIcon = new InteractIcon();
+    private MoveTurtorial turtorial = new MoveTurtorial();
     private int spawn1 = 0;
     private boolean isSpoken; //already speak or not
     
@@ -24,14 +24,14 @@ public class Npc extends NPCS
 
     public void check(){
         if (!isSpoken && isTouching(Player.class)){
-            getWorld().addObject(interactIcon, this.getX(), this.getY() - getImage().getHeight() - 80);
+            getWorld().addObject(turtorial, this.getX(), this.getY() - getImage().getHeight() - 80);
             if (Greenfoot.isKeyDown("e")){
                 createObjectText();
                 ((ImageScrollWorld) getWorld()).setEnable(false);
             }
         }
         if (!isTouching(Player.class) || isSpoken){
-            getWorld().removeObject(interactIcon);
+            getWorld().removeObject(turtorial);
         }
 
     }

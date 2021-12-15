@@ -58,21 +58,21 @@ public class MainScreenButton extends MenuUtils
             {
                 case "play": 
                         ((StartScreen) getWorld()).stopMusic();
-                        Greenfoot.setWorld(new ImageScrollWorld());
+                        Greenfoot.setWorld(new Lv1());
+                        break;
                         //this.setImage("PlayMenuButton.png");
-                    break;
                 case "options": 
                         getWorld().addObject(menu, getWorld().getWidth() / 2, getWorld().getHeight() / 2);
                         getWorld().addObject(new ControlsHelpButton(), getWorld().getWidth() / 2, getWorld().getHeight() / 2);
                         getWorld().addObject(new MenuArrow("closeOptions"), 50, getWorld().getHeight() - 50);
+                        break;
                         //getWorld().addObject(new MenuArrow("closeOptions"), 50, getWorld().getWidth() - 50);
                         
                         //this.setImage("OptionsMenuButton.png");
-                    break;
                 case "credits": 
                         Greenfoot.setWorld(new MainCredits());
+                        break;
                         //this.setImage("CreditsMenuButton.png");
-                    break;
             }
     }
 }

@@ -19,10 +19,15 @@ public class Lv1 extends scrollWorld
     public Lv1()
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
-        super(900, 600, 1, "Lv1.png", 550); 
+        super(900, 600, 1, "bgLv1.png", 1925); 
         
         width = getBackground().getWidth();
         height = getBackground().getHeight();
+        
+        addObject(new Floor(getBackground().getWidth(), 30), getWidth() / 2 + 300, 495);
+        addObject(new Floor(25, 1000), 0, 0);
+        addObject(new Floor(25, 1000), 1500, 0);
+        addObject(new Warp(1), 1450, 460);
         prepare();
     }
     /**
@@ -31,20 +36,10 @@ public class Lv1 extends scrollWorld
      */
     private void prepare()
     {
-        addObject(scrollActor, 5, 200); //add actor to world (wherever)
-        //addObject(new Npc(),566,550);
-        //addObject(new Floor(),150,480);
-        HpBar hpBar = new HpBar("", "");
-        addObject(hpBar, scrollActor.getX(), scrollActor.getY() - scrollActor.getImage().getHeight() * 3/4);
-        
-        //Floor floor = new Floor();
-        //for (int i = 0; i < 31; i++){
-        //    addObject(new Floor(), 100 * i, 877);
-        //    addObject(new Floor(), 100 * i, 0);
-        //}
-        //for (int i = 0; i < 9; i++){
-        //    addObject(new Floor(), 0, 100 * i);
-        //    addObject(new Floor(), 3000, 100 * i);            
-        //}
+        addObject(new Floor(72, 15), 381, 396);
+        addObject(new Floor(350, 15), 598, 329);
+        addObject(new Floor(350, 15), 1080, 329);
+        addObject(new Spikes(115,18), 397,469);
+        addObject(new Spikes(685,18), 912,469);
     }
 }

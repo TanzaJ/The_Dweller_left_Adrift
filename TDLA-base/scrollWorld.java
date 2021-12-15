@@ -31,10 +31,10 @@ public class scrollWorld extends World
         
         scroller = new Scroller(this, bg, bgWide, bgHigh); // creates the Scroller object
         scrollActor = new Player(); // creates the actor to maintain view on
-        addObject(scrollActor, bgWide / 2, groundHeight); //add actor to world (wherever)
+        addObject(scrollActor, 30, groundHeight); //add actor to world (wherever)
         
         
-        setPaintOrder(Player.class, HpBar.class, Enemies.class, InteractIcon.class);
+        setPaintOrder(Player.class, MoveTurtorial.class);
         
         scroll(); // sets initial background image and puts main actor in view if needed
         
@@ -48,7 +48,7 @@ public class scrollWorld extends World
     private void scroll() {
         //determine scrolling offsets and scroll
         int dsx = scrollActor.getX() - world_width / 2; // horizontal offset from center screen
-        int dsy = scrollActor.getY() - world_height / 2; //vertical offset from center screen
+        int dsy = scrollActor.getY() - world_height * 3/4; //vertical offset from center screen
         scroller.scroll(dsx, dsy);
     }
     

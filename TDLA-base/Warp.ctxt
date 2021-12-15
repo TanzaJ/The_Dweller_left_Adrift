@@ -1,8 +1,8 @@
 #BlueJ class context
 comment0.target=Warp
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ Warp\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=
-comment1.target=Warp()
+comment1.params=stage
+comment1.target=Warp(int)
 comment2.params=
 comment2.target=void\ act()
 comment2.text=\r\n\ Act\ -\ do\ whatever\ the\ Warp\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n

@@ -15,7 +15,7 @@ public class GameOver extends World
      */
     public GameOver()
     {    
-        super(600, 400, 1); 
+        super(900, 600, 1); 
         Greenfoot.stop();
     }
 }

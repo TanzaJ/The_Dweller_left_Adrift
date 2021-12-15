@@ -10,8 +10,11 @@ public class Warp extends Actor
 {   
     String worldDestination;
     int destinationX, destinationY;
-    public Warp() {
-        
+    int lv;
+    
+    public Warp(int stage) {
+        lv = stage;
+        getImage().setTransparency(0);
     }
     /**
      * Act - do whatever the Warp wants to do. This method is called whenever
@@ -19,6 +22,17 @@ public class Warp extends Actor
      */
     public void act()
     {
-        
+        if(isTouching(Player.class)) {
+            switch(lv) {
+                case 1:
+                    Greenfoot.setWorld(new Lv2());
+                    break;
+                case 2:
+                    Greenfoot.setWorld(new Lv3());
+                    break;
+                case 3:
+                   // Greenfoot.setWorld(new TheEnd());
+            }
+        }
     }
 }

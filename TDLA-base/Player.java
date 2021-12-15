@@ -18,9 +18,7 @@ public class Player extends Actor
     private int menuWaitTime = 0; // time before can press esc again
     private static int delayAni = 0;
     private int curImg; // use if have more than 2 imgs for animation
-    private int beHitTime;
-    private int attackTime;
-    private int heavyAttackCD = 0;
+    private int lives;
     
     //Jump check
     private boolean isJump = false;
@@ -28,25 +26,14 @@ public class Player extends Actor
     // Textbox 
     private static boolean moreThanOne;
     
-    //Player stats:
-    private final double maxHp = 100; // MaxHp + pre-initial (only for hpbar creation)
-    private double hp = 100; // create hp variable + pre-initial (for hpBar creation)
-    private double armor; // create armor variable
-    private double lightDmg; // create lightDmg variable
-    private double heavyDmg; // create heavyDmg variable
     
     private String bag;
     
     
     public Player() {
-        //initialize stats:
-        hp = 100;
-        armor = 25;
-        lightDmg = 25;
-        heavyDmg = 75;
-    
         direction = 'r';
-        setImage("RStand1.png");
+        setImage("RStand.png");
+        lives = 5;
     }
     public void returnSpeed(){
         
@@ -55,21 +42,21 @@ public class Player extends Actor
     public void act()
     {
         if (delayAni > 0) delayAni--;
-        
-        if (((ImageScrollWorld) getWorld()).checkEnable())  {
+        getWorld().showText("" + lives, 500, 500);
+        if (((scrollWorld) getWorld()).checkEnable())  {
             getWorld().setPaintOrder(Player.class);
             if (menuWaitTime > 0) 
                 menuWaitTime--; // only decrease when enable and time > 0
             if (menuWaitTime == 0 && Greenfoot.isKeyDown("escape")) {
                 getWorld().addObject(new EscMenu(), getWorld().getWidth() / 2, getWorld().getHeight() / 2);
-                ((ImageScrollWorld) getWorld()).setEnable(false); // disable movement
+                ((scrollWorld) getWorld()).setEnable(false); // disable movement
                 menuWaitTime = 40; // set wait time
                 Greenfoot.playSound("menuInteract.wav"); // activate the menu sound
             }
             checkKey();
+            checkLife();
+            fall();
             setAni();
-            beHitEffect();
-            
             if (dashCD > 0) dashCD--;
             if (dashingTime > 0) {
                 vSpeed = 0;
@@ -80,11 +67,7 @@ public class Player extends Actor
                 hMove();
                 dashingTime--;
             }
-            interact();
-            fall();
-            attack();
             viewMoreThanOne();
-            getWorld().showText("" + hSpeed, 500, 500);
         }
     }
     /**
@@ -92,10 +75,6 @@ public class Player extends Actor
      */
     public void hMove () {
         setLocation(getX() + hSpeed, getY());
-    }
-    
-    public void interact() {
-
     }
     
     /**
@@ -106,9 +85,9 @@ public class Player extends Actor
         int h = getImage().getHeight();
         
         if (hSpeed > 0 && 
-           (getOneObjectAtOffset(w / 2 + 8, h * -1/3, Collisions.class)) != null ||
-            getOneObjectAtOffset(w / 2 + 8, 0, Collisions.class) != null ||
-            getOneObjectAtOffset(w / 2 + 8, h * 1/3, Collisions.class) != null) {
+           (getOneObjectAtOffset(w / 2 + 8, h * -1/3, Floor.class)) != null ||
+            getOneObjectAtOffset(w / 2 + 8, 0, Floor.class) != null ||
+            getOneObjectAtOffset(w / 2 + 8, h * 1/3, Floor.class) != null) {
                 return true;        
         }
         return false;
@@ -118,9 +97,9 @@ public class Player extends Actor
         int h = getImage().getHeight();
         
         if (hSpeed < 0 && 
-           (getOneObjectAtOffset(w / -2 - 8, h * -1/3, Collisions.class)) != null ||
-            getOneObjectAtOffset(w / -2 - 8, 0, Collisions.class) != null ||
-            getOneObjectAtOffset(w / -2 - 8, h * 1/3, Collisions.class) != null) {
+           (getOneObjectAtOffset(w / -2 - 8, h * -1/3, Floor.class)) != null ||
+            getOneObjectAtOffset(w / -2 - 8, 0, Floor.class) != null ||
+            getOneObjectAtOffset(w / -2 - 8, h * 1/3, Floor.class) != null) {
                 return true;
         }
         return false;
@@ -133,8 +112,9 @@ public class Player extends Actor
         int w = getImage().getWidth(); 
         int h = getImage().getHeight();
 
-        if ((getOneObjectAtOffset(w / -2 + 5, h / 2, Collisions.class) != null ||
-            getOneObjectAtOffset(w / 2 - 5, h / 2, Collisions.class) != null)) {
+        if ((getOneObjectAtOffset(w / -2 + 5, h / 2, Floor.class) != null ||
+            getOneObjectAtOffset(w / 2 - 5, h / 2, Floor.class) != null) ||
+            getOneObjectAtOffset(0, h / 2, Floor.class) != null) {
             return true;
         }
         return false;
@@ -150,6 +130,7 @@ public class Player extends Actor
         if (vSpeed < 0 && 
             (getOneObjectAtOffset(w / -2 + 2, h / -2 - 3, Floor.class) != null ||
             getOneObjectAtOffset(w / 2 - 2, h / -2 - 3, Floor.class) != null)) {
+            //Greenfoot.playSound("collision.wav");
             return true;
         }
         return false;
@@ -172,8 +153,8 @@ public class Player extends Actor
         
         //dashing
         if (dashCD == 0 && dashingTime == 0 && Greenfoot.isKeyDown("a")) {
-            dashingTime = 15;
-            dashCD = 90;
+            dashingTime = 13;
+            dashCD = 60;
         }
         //horizontal move
         if (!Greenfoot.isKeyDown("left") && !Greenfoot.isKeyDown("right")) hSpeed = 0;
@@ -206,47 +187,14 @@ public class Player extends Actor
      */
     public void setAni() {
         if (delayAni > 0) delayAni--; // animation delay time decrease
-        if (heavyAttackCD > 0) heavyAttackCD--;
-        if (attackTime > 0) {
-            vSpeed = 0;
-            attackTime--;
-            
-        }
-        getWorld().showText("" + attackTime, 300, 500);
-        
-        if (dashingTime == 0 && vSpeed > 2) setImage("fall.png");
         if (direction == 'l') { // if direction = left 
             //dash
-            if (attackTime == 0 && dashingTime > 0) {
-                boolean equal_to_one = false;
-                for (int i = 1; i <= 4; i++) {
-                    if (ImageVisitor.equal(getImage(), new GreenfootImage("LDash" + i + ".png")))  {
-                        equal_to_one = true;
-                        break;
-                    }
-                }
-                if(!equal_to_one) {
-                    setImage("LDash1.png");
-                    delayAni = 0;
-                    curImg = 0;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LDash" + (curImg % 4 + 1) + ".png"))) {
-                    setImage("LDash" + ((curImg + 1) % 4 + 1) + ".png");
-                    delayAni = 30 / 4;
-                    curImg++;
-                    //getWorld().showText("" + curImg, 600, 500);
-                }
+            if (dashingTime > 1) {
+                setImage("LDash.png");
             }
             //standing
-            if (attackTime == 0 && checkGround() && hSpeed == 0) {
-                if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
-                    setImage("LStand1.png");
-                    delayAni = 180;
-                    }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("LStand1.png"))) {
-                    delayAni = 50;
-                    setImage("LStand2.png");
-                }
+            if (checkGround() && hSpeed == 0) {
+                setImage("LStand.png");
             }
             
             // moving
@@ -272,48 +220,13 @@ public class Player extends Actor
             if (vSpeed < 0) setImage("LJump.png");
         }
         if (direction == 'r') {
-            //attack:
-            //light attack
-            if (attackTime == 0 && Greenfoot.isKeyDown("s")) {
-                ;
-            }
-            //heavy attack
-            if (heavyAttackCD == 0 && attackTime == 0 && Greenfoot.isKeyDown("d")) {
-                getWorld().addObject(new WindWave(direction), getX() + 5, getY() - 55);
-                attackTime = 14;
-                heavyAttackCD = 200;
-            }
-            
             //dashing
-            if (dashingTime > 0) {
-                boolean equal_to_one = false;
-                for (int i = 1; i <= 4; i++) {
-                    if (ImageVisitor.equal(getImage(), new GreenfootImage("RDash" + i + ".png")))  {
-                        equal_to_one = true;
-                        break;
-                    }
-                }
-                if(!equal_to_one) {
-                    setImage("RDash1.png");
-                    delayAni = 0;
-                    curImg = 0;
-                }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RDash" + (curImg % 4 + 1) + ".png"))) {
-                    setImage("RDash" + ((curImg + 1) % 4 + 1) + ".png");
-                    delayAni = 15 / 4;
-                    curImg++;
-                }
+            if (dashingTime > 1) {
+                setImage("RDash.png");
             }
             //standing
             if (checkGround() && hSpeed == 0) {
-                if (delayAni == 0 && !ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
-                    setImage("RStand1.png");
-                    delayAni = 180;
-                    }
-                if (delayAni == 0 && ImageVisitor.equal(getImage(), new GreenfootImage("RStand1.png"))) {
-                    delayAni = 50;
-                    setImage("RStand2.png");
-                }
+                setImage("RStand.png");
             }
             //moving
             if (dashingTime == 0 && checkGround() && Greenfoot.isKeyDown("right")) {
@@ -338,52 +251,18 @@ public class Player extends Actor
             if (vSpeed < 0) setImage("RJump.png");
         }
     }
-    
-    public void attack() {
-            if (attackTime == 0 && Greenfoot.isKeyDown("s")) {
-                attackTime = 25;
-            }
-    }
-    
-    public void beHitEffect() {
-        int knockBackX = (direction == 'l') ? -3 : 3;
-        int knockBackY = (direction == 'l') ? -2 : 2;
-        while (beHitTime > 0) {
-            setLocation(getX() + knockBackX, getY() + knockBackY);
-            beHitTime--;
+
+    public void checkLife() {
+        if (lives <= 0) {
+            Greenfoot.setWorld(new GameOver());
         }
     }
-
     
-    /**
-     * when enemy hit, call this method to do dmg
-     */
-    public void getHit(int dmg) {
-        this.hp -= dmg * (1 - armor / 100);
-        beHitTime = 10;
+    public void loseLife(int amount) {
+        this.lives--;
     }
-    
+
     public static boolean viewMoreThanOne(){
         return moreThanOne;
     }
-
-    public void setArmor(double newArmor) {
-        armor = newArmor;
-    }
-    public void setLightDmg(double newDmg) {
-        lightDmg = newDmg;
-    }
-    
-    public void setHeavyDmg(double newDmg) {
-        heavyDmg = newDmg;
-    }
-    
-    public double getMaxHp() {
-        return maxHp;
-    }
-    
-    public double getHp() {
-        return hp;
-    }
-    
 }
