@@ -23,7 +23,7 @@ public class Lv1 extends scrollWorld
         
         width = getBackground().getWidth();
         height = getBackground().getHeight();
-        
+        addObject(new Npc(), 180, 455);
         addObject(new Floor(getBackground().getWidth(), 30), getWidth() / 2 + 300, 495);
         addObject(new Floor(25, 1000), 0, 0);
         addObject(new Floor(25, 1000), 1500, 0);

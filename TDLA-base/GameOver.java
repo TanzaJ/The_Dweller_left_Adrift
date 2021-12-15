@@ -16,6 +16,7 @@ public class GameOver extends World
     public GameOver()
     {    
         super(900, 600, 1); 
+        getBackground().drawImage(new GreenfootImage("gameOver.png"), 0, getHeight() / 2 - 75);
         Greenfoot.stop();
     }
 }
