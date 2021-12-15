@@ -43,6 +43,10 @@ public class StartScreen extends World
     {
         black.getImage().setTransparency(opacity);
         addObject(black, getWidth() / 2, getHeight() / 2);
+        showText("James K, Philip D, Vinh M", getWidth() / 2, 100);
+        showText("Game Programming 1", getWidth() / 2, 250 + 150);
+        showText("Fall 2021", getWidth() / 2, 200 );
+        showText("Tassia Araujo, Ivan M", getWidth() / 2, 250);
     }
     
     public void act() 
